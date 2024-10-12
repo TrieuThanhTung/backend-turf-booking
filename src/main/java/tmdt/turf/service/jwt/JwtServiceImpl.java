@@ -38,13 +38,14 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateToken(String email, Role role) {
+    public String generateToken(Integer userId, String email, Role role) {
         Date currentTime = new Date();
         Date expiredTime = new Date(currentTime.getTime() + Util.ACCESS_TOKEN_TIME * 1000);
         Map<String, String> mapClaims = new HashMap<>();
+        mapClaims.put("id", String.valueOf(userId));
         mapClaims.put("email", email);
-        mapClaims.put("type", TokenType.ACCESS.name());
         mapClaims.put("role", role.name());
+        mapClaims.put("type_token", TokenType.ACCESS.name());
         return Jwts.builder()
                 .setClaims(mapClaims)
                 .setIssuedAt(currentTime)
