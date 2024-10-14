@@ -1,5 +1,6 @@
 package tmdt.turf.model.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,7 +35,9 @@ public class User implements UserDetails {
     private Role role = Role.CUSTOMER;
     private Boolean enabled = false;
     private String avatar;
+    @JsonFormat(pattern = "HH:mm MM/dd/yyyy")
     private LocalDateTime createdAt;
+    @JsonFormat(pattern = "HH:mm MM/dd/yyyy")
     private LocalDateTime updatedAt;
 
     @Override
