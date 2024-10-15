@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @AllArgsConstructor
@@ -20,7 +21,7 @@ public class TimeSlot {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @JsonFormat(pattern = "HH:mm MM/dd/yyyy")
-    private LocalDateTime startTime;
+    private LocalTime startTime;
     @JsonFormat(pattern = "HH:mm MM/dd/yyyy")
-    private LocalDateTime endTime;
+    private LocalTime endTime;
 }

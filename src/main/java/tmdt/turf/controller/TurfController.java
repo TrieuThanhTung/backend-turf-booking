@@ -1,14 +1,14 @@
 package tmdt.turf.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import tmdt.turf.dto.request.NewTimeSlot;
+import tmdt.turf.dto.request.NewTurf;
 import tmdt.turf.dto.response.PageTurfs;
-import tmdt.turf.model.turf.Turf;
 import tmdt.turf.service.turf.TurfService;
 import tmdt.turf.util.APIResponse;
 
@@ -20,11 +20,23 @@ import java.util.List;
 public class TurfController {
     private final TurfService turfService;
 
+    @PostMapping("/time-slot")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> createNewTimeSlot(@RequestBody @Valid NewTimeSlot newTimeSlot) {
+        turfService.createNewTimeSlot(newTimeSlot);
+        return ResponseEntity.ok(new APIResponse("Create success.", null));
+    }
+
     @GetMapping
     public ResponseEntity<?> getEnableTurfs() {
         PageTurfs turfs = turfService.getEnableTurfs();
         return ResponseEntity.ok(new APIResponse("Get success.", turfs));
     }
 
-
+    @PostMapping
+    public ResponseEntity<?> createNewTurf(@RequestBody @Valid NewTurf newTurf) {
+        turfService.createNewTurf(newTurf);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new APIResponse("Create success.", null));
+    }
 }

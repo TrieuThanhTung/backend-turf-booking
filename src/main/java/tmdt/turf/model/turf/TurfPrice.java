@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @AllArgsConstructor
@@ -16,9 +17,8 @@ public class TurfPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "FK_PRICES_TIME_SLOT"))
-    private TimeSlot timeSlot;
+    private LocalTime start_time;
+    private LocalTime end_time;
     private Double price;
     @JsonFormat(pattern = "HH:mm MM/dd/yyyy")
     private LocalDateTime createdAt;
