@@ -6,7 +6,7 @@ import tmdt.turf.model.enums.Role;
 public interface JwtService {
     String generateToken(String email);
 
-    String generateToken(String email, Role role);
+    String generateToken(Integer id, String email, Role role);
 
     String generateRefreshToken(String subject);
 

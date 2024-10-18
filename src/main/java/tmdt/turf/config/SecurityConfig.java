@@ -42,11 +42,7 @@ public class SecurityConfig {
     };
 
     private static final String[] WHITE_LIST_GET_URLS = {
-            "/api/brands",
-            "/api/categories/**",
-            "/api/products/**",
-            "/api/images/**",
-            "/api/discounts/**"
+            "/api/turfs/**",
     };
 
     private static final String[] URL_SWAGGER = {

@@ -52,9 +52,8 @@ public class AuthServiceImpl implements AuthService{
         if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
             throw new CustomException("Login FAIL!. Email or password not match.", HttpStatus.NOT_FOUND);
         }
-//        return createAccessAndRefreshToken(user);
         return TokenDto.builder()
-                .accessToken(jwtService.generateToken(user.getEmail(), user.getRole()))
+                .accessToken(jwtService.generateToken(user.getId(), user.getEmail(), user.getRole()))
                 .refreshToken("Refresh token")
                 .build();
     }
