@@ -30,9 +30,9 @@ public class TurfServiceImpl implements TurfService{
     private final TimeSlotRepository timeSlotRepository;
 
     @Override
-    public PageTurfs getEnableTurfs() {
+    public PageTurfs getEnableTurfs(Integer page) {
         Sort sortWishItem = Sort.by("createdAt").descending();
-        Pageable pageable = PageRequest.of(0, 20, sortWishItem);
+        Pageable pageable = PageRequest.of(page, 20, sortWishItem);
         Page<Turf> turfPage = turfRepository.findAll(pageable);
         return PageTurfs.builder()
                 .turfs(turfPage.getContent())

@@ -21,9 +21,9 @@ public class Turf {
     private String name;
     private String description;
     private String address;
-    @Column(columnDefinition = "DECIMAL(8, 6)")
+    @Column(columnDefinition = "DECIMAL(9, 6)")
     private Float location_lat;
-    @Column(columnDefinition = "DECIMAL(8, 6)")
+    @Column(columnDefinition = "DECIMAL(9, 6)")
     private Float location_lon;
     private Float rating;
     @Enumerated(EnumType.STRING)

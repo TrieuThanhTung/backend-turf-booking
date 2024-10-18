@@ -28,8 +28,8 @@ public class TurfController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getEnableTurfs() {
-        PageTurfs turfs = turfService.getEnableTurfs();
+    public ResponseEntity<?> getEnableTurfs(@RequestParam(value = "page", defaultValue = "1") Integer page) {
+        PageTurfs turfs = turfService.getEnableTurfs(page);
         return ResponseEntity.ok(new APIResponse("Get success.", turfs));
     }
 
