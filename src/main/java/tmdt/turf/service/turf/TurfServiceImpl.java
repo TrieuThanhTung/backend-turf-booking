@@ -32,7 +32,7 @@ public class TurfServiceImpl implements TurfService{
     @Override
     public PageTurfs getEnableTurfs(Integer page) {
         Sort sortWishItem = Sort.by("createdAt").descending();
-        Pageable pageable = PageRequest.of(page, 20, sortWishItem);
+        Pageable pageable = PageRequest.of(page - 1, 20, sortWishItem);
         Page<Turf> turfPage = turfRepository.findAll(pageable);
         return PageTurfs.builder()
                 .turfs(turfPage.getContent())
@@ -81,5 +81,11 @@ public class TurfServiceImpl implements TurfService{
         newTurf.setImages(turfImages);
         newTurf.setPrices(turfPrices);
         turfRepository.save(newTurf);
+    }
+
+    @Override
+    public Turf getTurfById(Integer id) {
+        return turfRepository.findById(id)
+                .orElseThrow(() -> new CustomException("Turf not found", HttpStatus.NOT_FOUND));
     }
 }

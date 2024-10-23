@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import tmdt.turf.dto.request.NewTimeSlot;
 import tmdt.turf.dto.request.NewTurf;
 import tmdt.turf.dto.response.PageTurfs;
+import tmdt.turf.model.turf.Turf;
 import tmdt.turf.service.turf.TurfService;
 import tmdt.turf.util.APIResponse;
 
@@ -25,6 +26,12 @@ public class TurfController {
     public ResponseEntity<?> createNewTimeSlot(@RequestBody @Valid NewTimeSlot newTimeSlot) {
         turfService.createNewTimeSlot(newTimeSlot);
         return ResponseEntity.ok(new APIResponse("Create success.", null));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getTurfById(@PathVariable Integer id) {
+        Turf turfs = turfService.getTurfById(id);
+        return ResponseEntity.ok(new APIResponse("Get success.", turfs));
     }
 
     @GetMapping
