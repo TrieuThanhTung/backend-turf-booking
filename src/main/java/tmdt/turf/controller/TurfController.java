@@ -41,6 +41,7 @@ public class TurfController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('TURF_OWNER')")
     public ResponseEntity<?> createNewTurf(@RequestBody @Valid NewTurf newTurf) {
         turfService.createNewTurf(newTurf);
         return ResponseEntity.status(HttpStatus.CREATED)

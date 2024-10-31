@@ -3,7 +3,10 @@ package tmdt.turf.model.turf;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Type;
 import tmdt.turf.model.enums.TurfStatus;
+import tmdt.turf.model.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,6 +43,12 @@ public class Turf {
             foreignKey = @ForeignKey(name = "FK_TURF_PRICES")
     )
     private List<TurfPrice> prices;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "owner_id",
+            foreignKey = @ForeignKey(name = "FK_TURF_USERS")
+    )
+    private User owner;
     @JsonFormat(pattern = "HH:mm MM/dd/yyyy")
     private LocalDateTime createdAt;
     @JsonFormat(pattern = "HH:mm MM/dd/yyyy")
