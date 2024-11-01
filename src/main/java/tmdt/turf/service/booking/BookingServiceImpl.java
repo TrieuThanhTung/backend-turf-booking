@@ -16,6 +16,7 @@ import tmdt.turf.repository.TurfRepository;
 import tmdt.turf.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +36,8 @@ public class BookingServiceImpl implements BookingService{
                 .filter(price -> price.getId().equals(bookingDto.getTurfPriceId()))
                 .findFirst()
                 .orElseThrow(() -> new CustomException("Turf price not found", HttpStatus.NOT_FOUND));
+        Optional<Booking> optionalBooking = bookingRepository.findByTurfAndDateTime(turf, turfPrice.getStart_time(), bookingDto.getDateBooking());
+        if(optionalBooking.isPresent()) throw new CustomException("Turf is booked", HttpStatus.NOT_ACCEPTABLE);
         Booking booking = Booking.builder()
                 .user(user)
                 .turf(turf)
