@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import tmdt.turf.model.booking.Booking;
 import tmdt.turf.model.turf.Turf;
-import tmdt.turf.model.user.User;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
