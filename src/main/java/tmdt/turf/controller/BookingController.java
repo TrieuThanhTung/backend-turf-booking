@@ -3,11 +3,10 @@ package tmdt.turf.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tmdt.turf.dto.request.BookingDto;
+import tmdt.turf.dto.response.PageBookings;
+import tmdt.turf.model.enums.BookingStatus;
 import tmdt.turf.service.booking.BookingService;
 import tmdt.turf.util.APIResponse;
 
@@ -21,5 +20,12 @@ public class BookingController {
     public ResponseEntity<?> create (@RequestBody BookingDto bookingDto) {
         bookingService.create(bookingDto);
         return ResponseEntity.status(201).body(new APIResponse("Booking successfully!", null));
+    }
+
+    @GetMapping
+    public ResponseEntity<?> get (@RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
+                                  @RequestParam(name = "status", defaultValue = "PENDING", required = false) BookingStatus status) {
+        PageBookings pageBookings = bookingService.get(page, status);
+        return ResponseEntity.status(200).body(new APIResponse("Get booking successfully!", pageBookings));
     }
 }
