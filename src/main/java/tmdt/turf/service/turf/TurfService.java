@@ -13,4 +13,6 @@ public interface TurfService {
     void createNewTurf(NewTurf newTurf);
 
     Turf getTurfById(Integer id);
+
+    PageTurfs getTurfsByQuery(String query, Integer page);
 }

@@ -40,6 +40,13 @@ public class TurfController {
         return ResponseEntity.ok(new APIResponse("Get success.", turfs));
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<?> getTurfsByQuery(@RequestParam(value = "query") String query,
+                                             @RequestParam(value = "page", defaultValue = "1") Integer page) {
+        PageTurfs turfs = turfService.getTurfsByQuery(query, page);
+        return ResponseEntity.ok(new APIResponse("Get success.", turfs));
+    }
+
     @PostMapping
     @PreAuthorize("hasAuthority('TURF_OWNER')")
     public ResponseEntity<?> createNewTurf(@RequestBody @Valid NewTurf newTurf) {

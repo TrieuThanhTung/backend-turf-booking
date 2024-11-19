@@ -14,5 +14,7 @@ import java.util.Optional;
 public interface TurfRepository extends JpaRepository<Turf, Integer> {
     Page<Turf> findAllByStatus(TurfStatus status, Pageable pageable);
 
+    Page<Turf> findByNameContainingOrAddressContaining(String name, String address, Pageable pageable);
+
     Optional<Turf> findByName(String name);
 }

@@ -88,4 +88,16 @@ public class TurfServiceImpl implements TurfService{
         return turfRepository.findById(id)
                 .orElseThrow(() -> new CustomException("Turf not found", HttpStatus.NOT_FOUND));
     }
+
+    @Override
+    public PageTurfs getTurfsByQuery(String query, Integer page) {
+        Sort sortWishItem = Sort.by("createdAt").descending();
+        Pageable pageable = PageRequest.of(page - 1, 20, sortWishItem);
+        Page<Turf> turfPage = turfRepository.findByNameContainingOrAddressContaining(query, query, pageable);
+        return PageTurfs.builder()
+                .turfs(turfPage.getContent())
+                .currentPage(turfPage.getNumber() + 1)
+                .totalPages(turfPage.getTotalPages())
+                .build();
+    }
 }
