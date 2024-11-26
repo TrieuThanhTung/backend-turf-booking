@@ -20,6 +20,7 @@ import tmdt.turf.model.user.User;
 import tmdt.turf.repository.BookingRepository;
 import tmdt.turf.repository.TurfRepository;
 import tmdt.turf.repository.UserRepository;
+import tmdt.turf.service.user.UserService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,6 +32,7 @@ public class BookingServiceImpl implements BookingService {
     final private UserRepository userRepository;
     final private TurfRepository turfRepository;
     final private BookingRepository bookingRepository;
+    final private UserService userService;
 
     @Override
     public void create(BookingDto bookingDto) {
@@ -61,9 +63,10 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public PageBookings get(Integer page, BookingStatus status) {
+        User user = userService.getProfile();
         Sort sortWishItem = Sort.by("createdAt").descending();
         Pageable pageable = PageRequest.of(page - 1, 5, sortWishItem);
-        Page<Booking> bookingPage = bookingRepository.findByStatus(status, pageable);
+        Page<Booking> bookingPage = bookingRepository.findByStatusAndUser(status, user, pageable);
         List<BookingResponseDto> bookingResponseDtos = bookingPage.getContent().stream()
                 .map((booking) -> {
                             BookingResponseDto bookingResponseDto = BookingResponseDto.builder()

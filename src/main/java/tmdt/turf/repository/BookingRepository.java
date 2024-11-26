@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import tmdt.turf.model.booking.Booking;
 import tmdt.turf.model.enums.BookingStatus;
 import tmdt.turf.model.turf.Turf;
+import tmdt.turf.model.user.User;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,5 +20,5 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "where b.turf = ?1 and b.startTime = ?2 and b.date = ?3")
     Optional<Booking> findByTurfAndDateTime(Turf turf, LocalTime startTime, LocalDate date);
 
-    Page<Booking> findByStatus(BookingStatus status, Pageable pageable);
+    Page<Booking> findByStatusAndUser(BookingStatus status, User user, Pageable pageable);
 }
