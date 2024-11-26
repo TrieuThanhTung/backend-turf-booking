@@ -1,6 +1,7 @@
 package tmdt.turf.model.turf;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
@@ -43,6 +44,7 @@ public class Turf {
             foreignKey = @ForeignKey(name = "FK_TURF_PRICES")
     )
     private List<TurfPrice> prices;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
             name = "owner_id",
