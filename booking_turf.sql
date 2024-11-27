@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 27, 2024 at 05:18 AM
+-- Generation Time: Nov 27, 2024 at 08:08 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `booking_turf`
 --
+CREATE DATABASE IF NOT EXISTS `booking_turf` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `booking_turf`;
 
 -- --------------------------------------------------------
 
@@ -27,8 +29,9 @@ SET time_zone = "+00:00";
 -- Table structure for table `booking`
 --
 
-CREATE TABLE `booking` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `booking`;
+CREATE TABLE IF NOT EXISTS `booking` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `created_at` datetime(6) DEFAULT NULL,
   `date` date DEFAULT NULL,
   `end_time` time(6) DEFAULT NULL,
@@ -37,8 +40,11 @@ CREATE TABLE `booking` (
   `status` enum('DONE','PAID','PENDING','CANCELLED') DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `turf_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `turf_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_BOOKING_USERS` (`user_id`),
+  KEY `FK_BOOKING_TURFS` (`turf_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
@@ -55,7 +61,8 @@ INSERT INTO `booking` (`id`, `created_at`, `date`, `end_time`, `price`, `start_t
 (8, '2024-11-06 11:30:09.000000', '2024-11-06', '08:30:00.000000', 600000, '07:00:00.000000', 'CANCELLED', '2024-11-06 11:30:09.000000', 2, 131),
 (9, '2024-11-10 15:27:01.000000', '2024-11-20', '22:00:00.000000', 8000000, '20:30:00.000000', 'CANCELLED', '2024-11-10 15:27:01.000000', 2, 131),
 (10, '2024-11-19 13:27:33.000000', '2024-11-20', '19:00:00.000000', 1000000, '17:30:00.000000', 'PENDING', '2024-11-19 13:27:33.000000', 3, 131),
-(11, '2024-11-26 21:32:36.000000', '2024-11-26', '21:30:00.000000', 1200000, '20:30:00.000000', 'PENDING', '2024-11-26 21:32:36.000000', 2, 147);
+(11, '2024-11-26 21:32:36.000000', '2024-11-26', '21:30:00.000000', 1200000, '20:30:00.000000', 'PENDING', '2024-11-26 21:32:36.000000', 2, 147),
+(12, '2024-11-27 11:26:37.000000', '2024-11-29', '19:00:00.000000', 1000000, '17:30:00.000000', 'PENDING', '2024-11-27 11:26:37.000000', 2, 131);
 
 -- --------------------------------------------------------
 
@@ -63,11 +70,13 @@ INSERT INTO `booking` (`id`, `created_at`, `date`, `end_time`, `price`, `start_t
 -- Table structure for table `time_slot`
 --
 
-CREATE TABLE `time_slot` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `time_slot`;
+CREATE TABLE IF NOT EXISTS `time_slot` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `end_time` time(6) DEFAULT NULL,
-  `start_time` time(6) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `start_time` time(6) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `time_slot`
@@ -91,8 +100,9 @@ INSERT INTO `time_slot` (`id`, `end_time`, `start_time`) VALUES
 -- Table structure for table `turf`
 --
 
-CREATE TABLE `turf` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `turf`;
+CREATE TABLE IF NOT EXISTS `turf` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `address` varchar(255) DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `description` text DEFAULT NULL,
@@ -102,8 +112,10 @@ CREATE TABLE `turf` (
   `rating` float DEFAULT NULL,
   `status` enum('DISABLE','DRAFT','ENABLE') DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `owner_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `owner_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_TURF_USERS` (`owner_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=152 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `turf`
@@ -265,11 +277,14 @@ INSERT INTO `turf` (`id`, `address`, `created_at`, `description`, `location_lat`
 -- Table structure for table `turf_image`
 --
 
-CREATE TABLE `turf_image` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `turf_image`;
+CREATE TABLE IF NOT EXISTS `turf_image` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(255) NOT NULL,
-  `turf_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `turf_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_TURF_IMAGES` (`turf_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=491 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `turf_image`
@@ -772,15 +787,18 @@ INSERT INTO `turf_image` (`id`, `url`, `turf_id`) VALUES
 -- Table structure for table `turf_price`
 --
 
-CREATE TABLE `turf_price` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `turf_price`;
+CREATE TABLE IF NOT EXISTS `turf_price` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `created_at` datetime(6) DEFAULT NULL,
   `end_time` time(6) DEFAULT NULL,
   `price` double DEFAULT NULL,
   `start_time` time(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `turf_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `turf_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_TURF_PRICES` (`turf_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1449 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `turf_price`
@@ -2241,8 +2259,9 @@ INSERT INTO `turf_price` (`id`, `created_at`, `end_time`, `price`, `start_time`,
 -- Table structure for table `user`
 --
 
-CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE IF NOT EXISTS `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `avatar` varchar(255) DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
@@ -2252,8 +2271,11 @@ CREATE TABLE `user` (
   `password` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
   `role` enum('ADMIN','CUSTOMER','TURF_OWNER') DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `updated_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK_ob8kqyqqgmefl0aco34akdtpe` (`email`),
+  UNIQUE KEY `UK_589idila9li6a4arw1t8ht1gx` (`phone`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
@@ -2264,93 +2286,6 @@ INSERT INTO `user` (`id`, `avatar`, `created_at`, `email`, `enabled`, `first_nam
 (3, NULL, '2024-10-16 01:01:32.000000', 'owner@turf.com', b'1', 'Mr', 'Owner', '$2a$10$/.8CZfvTqsGe/Gci/Ajthe/HkFubV57ItEqCfPjFeaTICQnInwzFq', NULL, 'TURF_OWNER', '2024-10-16 01:01:32.000000'),
 (4, NULL, '2024-11-19 15:33:44.000000', 'owner1@turf.com', b'1', 'Mr', 'Owner1', '$2a$10$Y81mT5Yex.ZsdNM7S9a22.19YS4P/wgGbofCFrmPc/yZa76z//VCK', NULL, 'TURF_OWNER', '2024-11-19 15:33:44.000000'),
 (5, NULL, '2024-11-19 15:33:53.000000', 'owner2@turf.com', b'1', 'Mr', 'Owner2', '$2a$10$KsdWM6g8E8XgyWMXopCj5.uiGHt0EggfHY0lLQefXAewSpNs7sY66', NULL, 'TURF_OWNER', '2024-11-19 15:33:53.000000');
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `booking`
---
-ALTER TABLE `booking`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_BOOKING_USERS` (`user_id`),
-  ADD KEY `FK_BOOKING_TURFS` (`turf_id`);
-
---
--- Indexes for table `time_slot`
---
-ALTER TABLE `time_slot`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `turf`
---
-ALTER TABLE `turf`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_TURF_USERS` (`owner_id`);
-
---
--- Indexes for table `turf_image`
---
-ALTER TABLE `turf_image`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_TURF_IMAGES` (`turf_id`);
-
---
--- Indexes for table `turf_price`
---
-ALTER TABLE `turf_price`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `FK_TURF_PRICES` (`turf_id`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UK_ob8kqyqqgmefl0aco34akdtpe` (`email`),
-  ADD UNIQUE KEY `UK_589idila9li6a4arw1t8ht1gx` (`phone`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `booking`
---
-ALTER TABLE `booking`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `time_slot`
---
-ALTER TABLE `time_slot`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `turf`
---
-ALTER TABLE `turf`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
-
---
--- AUTO_INCREMENT for table `turf_image`
---
-ALTER TABLE `turf_image`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=491;
-
---
--- AUTO_INCREMENT for table `turf_price`
---
-ALTER TABLE `turf_price`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1449;
-
---
--- AUTO_INCREMENT for table `user`
---
-ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
