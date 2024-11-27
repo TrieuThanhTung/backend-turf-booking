@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 05, 2024 at 05:52 PM
+-- Generation Time: Nov 27, 2024 at 05:18 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `booking_turf`
 --
-CREATE DATABASE IF NOT EXISTS `booking_turf` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `booking_turf`;
 
 -- --------------------------------------------------------
 
@@ -29,21 +27,18 @@ USE `booking_turf`;
 -- Table structure for table `booking`
 --
 
-CREATE TABLE IF NOT EXISTS `booking` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `booking` (
+  `id` int(11) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `date` date DEFAULT NULL,
   `end_time` time(6) DEFAULT NULL,
   `price` double DEFAULT NULL,
   `start_time` time(6) DEFAULT NULL,
-  `status` enum('DONE','PAID','PENDING') DEFAULT NULL,
+  `status` enum('DONE','PAID','PENDING','CANCELLED') DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `turf_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_BOOKING_USERS` (`user_id`),
-  KEY `FK_BOOKING_TURFS` (`turf_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `turf_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `booking`
@@ -51,12 +46,16 @@ CREATE TABLE IF NOT EXISTS `booking` (
 
 INSERT INTO `booking` (`id`, `created_at`, `date`, `end_time`, `price`, `start_time`, `status`, `updated_at`, `user_id`, `turf_id`) VALUES
 (1, '2024-10-31 23:57:29.000000', '2024-10-31', '08:30:00.000000', 600000, '07:00:00.000000', 'PENDING', '2024-10-31 23:57:29.000000', 3, 2),
-(2, '2024-11-01 11:20:45.000000', '2024-11-27', '17:30:00.000000', 800000, '16:00:00.000000', 'PENDING', '2024-11-01 11:20:45.000000', 3, 116),
-(3, '2024-11-05 16:25:50.000000', '2024-11-05', '10:00:00.000000', 600000, '08:30:00.000000', 'PENDING', '2024-11-05 16:25:50.000000', 2, 142),
+(2, '2024-11-01 11:20:45.000000', '2024-11-27', '17:30:00.000000', 800000, '16:00:00.000000', 'PAID', '2024-11-01 11:20:45.000000', 3, 116),
+(3, '2024-11-05 16:25:50.000000', '2024-11-05', '10:00:00.000000', 600000, '08:30:00.000000', 'DONE', '2024-11-05 16:25:50.000000', 2, 142),
 (4, '2024-11-05 16:29:23.000000', '2024-11-06', '17:30:00.000000', 800000, '16:00:00.000000', 'PENDING', '2024-11-05 16:29:23.000000', 2, 142),
 (5, '2024-11-05 16:32:13.000000', '2024-11-06', '19:00:00.000000', 1000000, '17:30:00.000000', 'PENDING', '2024-11-05 16:32:13.000000', 2, 142),
 (6, '2024-11-05 16:55:44.000000', '2024-11-03', '13:00:00.000000', 500000, '11:30:00.000000', 'PENDING', '2024-11-05 16:55:44.000000', 2, 106),
-(7, '2024-11-05 23:14:03.000000', '2024-11-12', '17:30:00.000000', 800000, '16:00:00.000000', 'PENDING', '2024-11-05 23:14:03.000000', 2, 145);
+(7, '2024-11-05 23:14:03.000000', '2024-11-12', '17:30:00.000000', 800000, '16:00:00.000000', 'PENDING', '2024-11-05 23:14:03.000000', 2, 145),
+(8, '2024-11-06 11:30:09.000000', '2024-11-06', '08:30:00.000000', 600000, '07:00:00.000000', 'CANCELLED', '2024-11-06 11:30:09.000000', 2, 131),
+(9, '2024-11-10 15:27:01.000000', '2024-11-20', '22:00:00.000000', 8000000, '20:30:00.000000', 'CANCELLED', '2024-11-10 15:27:01.000000', 2, 131),
+(10, '2024-11-19 13:27:33.000000', '2024-11-20', '19:00:00.000000', 1000000, '17:30:00.000000', 'PENDING', '2024-11-19 13:27:33.000000', 3, 131),
+(11, '2024-11-26 21:32:36.000000', '2024-11-26', '21:30:00.000000', 1200000, '20:30:00.000000', 'PENDING', '2024-11-26 21:32:36.000000', 2, 147);
 
 -- --------------------------------------------------------
 
@@ -64,12 +63,11 @@ INSERT INTO `booking` (`id`, `created_at`, `date`, `end_time`, `price`, `start_t
 -- Table structure for table `time_slot`
 --
 
-CREATE TABLE IF NOT EXISTS `time_slot` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `time_slot` (
+  `id` int(11) NOT NULL,
   `end_time` time(6) DEFAULT NULL,
-  `start_time` time(6) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `start_time` time(6) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `time_slot`
@@ -93,171 +91,173 @@ INSERT INTO `time_slot` (`id`, `end_time`, `start_time`) VALUES
 -- Table structure for table `turf`
 --
 
-CREATE TABLE IF NOT EXISTS `turf` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `turf` (
+  `id` int(11) NOT NULL,
   `address` varchar(255) DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
   `location_lat` decimal(9,6) DEFAULT NULL,
   `location_lon` decimal(9,6) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `rating` float DEFAULT NULL,
   `status` enum('DISABLE','DRAFT','ENABLE') DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `owner_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_TURF_USERS` (`owner_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `owner_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `turf`
 --
 
 INSERT INTO `turf` (`id`, `address`, `created_at`, `description`, `location_lat`, `location_lon`, `name`, `rating`, `status`, `updated_at`, `owner_id`) VALUES
-(2, '5 Đ. Đào Sư Tích, Xã Phước Kiển, Huyện Nhà Bè, Hồ Chí Minh', '2024-10-17 16:23:44.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá ALOHA', 0, 'ENABLE', '2024-10-17 16:23:44.000000', NULL),
-(3, '85 Ngõ 180 Đường Đình Thôn, Phường Mỹ Đình 1, Nam Từ Liêm, Hà Nội', '2024-10-17 16:24:33.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Đình Thôn 2', 0, 'ENABLE', '2024-10-17 16:24:33.000000', NULL),
-(4, '99 Đ. Nguyễn Trường Tộ, Phường Bình Khánh, Thành phố Long Xuyên, An Giang', '2024-10-17 16:24:33.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Minh Khôi', 0, 'ENABLE', '2024-10-17 16:24:33.000000', NULL),
-(5, '147 Nguyễn Đức Thuận, Phường 13, Quận Tân Bình, Hồ Chí Minh', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá K3', 0, 'ENABLE', '2024-10-17 16:24:34.000000', NULL),
-(6, '35 Phan Bội Châu, Phường 1, Thành phố Vũng Tàu, Bà Rịa - Vũng Tàu', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá CV9 - Vũng Tàu', 0, 'ENABLE', '2024-10-17 16:24:34.000000', NULL),
-(7, 'Khu đô thị Văn Quán, Phường Văn Quán, Hà Đông, Hà Nội', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Zone9 Văn Quán', 0, 'ENABLE', '2024-10-17 16:24:34.000000', NULL),
-(8, 'Sân Bóng đá mini Quang Tuyến, Xã Mỹ Thạnh, Huyện Thủ Thừa, Long An', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng đá mini Quang Tuyến', 0, 'ENABLE', '2024-10-17 16:24:34.000000', NULL),
-(9, 'Đinh Tiên Hoàng, Phường Thanh Châu, Thành phố Phủ Lý, Hà Nam', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Thành Danh - Hà Nam', 0, 'ENABLE', '2024-10-17 16:24:34.000000', NULL),
-(10, 'Sân Bóng Sơn Tây Mansion, Xã Cổ Đông, Sơn Tây, Hà Nội', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Sơn Tây Mansion', 0, 'ENABLE', '2024-10-17 16:24:34.000000', NULL),
-(11, '63 Nguyễn Huy Tưởng, Phường Thanh Xuân Trung, Thanh Xuân, Hà Nội', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng 63 - Hà Nội', 0, 'ENABLE', '2024-10-17 16:24:34.000000', NULL),
-(12, 'Thủ Đức, Hồ Chí Minh, Phường Linh Trung, Thành phố Thủ Đức, Hồ Chí Minh', '2024-10-17 16:24:35.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Năm Nhỏ', 0, 'ENABLE', '2024-10-17 16:24:35.000000', NULL),
-(13, '26 Xô Viết Nghệ Tĩnh, Phường 7, Thành phố Đà Lạt, Lâm Đồng', '2024-10-17 16:24:35.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng 139 Đà Lạt', 0, 'ENABLE', '2024-10-17 16:24:35.000000', NULL),
-(14, 'Đường số 2 Gamuda Gardens, Phường Trần Phú, Hoàng Mai, Hà Nội', '2024-10-17 16:24:35.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá The One Gamuda', 0, 'ENABLE', '2024-10-17 16:24:35.000000', NULL),
-(15, 'Xã Thanh Thùy, Thanh Oai, Hà Nội', '2024-10-17 16:24:35.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng cỏ nhân tạo Thanh Thùy', 0, 'ENABLE', '2024-10-17 16:24:35.000000', NULL),
-(16, 'Xã Cao Viên, Thanh Oai, Hà Nội', '2024-10-17 16:24:35.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng cỏ nhân tạo Cao Viên', 0, 'ENABLE', '2024-10-17 16:24:35.000000', NULL),
-(17, 'Bac Rach Chiec, Phường Phước Long A, Quận 9, Hồ Chí Minh', '2024-10-17 16:24:35.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá SACA Arena', 0, 'ENABLE', '2024-10-17 16:24:35.000000', NULL),
-(18, '324 Chu Văn An, Phường 12, Quận Bình Thạnh, Hồ Chí Minh', '2024-10-17 16:25:54.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá HCA', 0, 'ENABLE', '2024-10-17 16:25:54.000000', NULL),
-(19, 'Sân bóng Thượng Mỗ, Xã Thượng Mỗ, Đan Phượng, Hà Nội', '2024-10-17 16:25:54.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Thượng Mỗ', 0, 'ENABLE', '2024-10-17 16:25:54.000000', NULL),
-(20, 'Khu đô thị Cao Xanh, Phường Cao Xanh, Thành phố Hạ Long, Quảng Ninh', '2024-10-17 16:25:54.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá 88 Newstar', 0, 'ENABLE', '2024-10-17 16:25:54.000000', NULL),
-(21, 'Sân bóng Thiên An, Phường Định Hoà, Thành phố Thủ Dầu Một, Bình Dương', '2024-10-17 16:25:54.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Thiên An - Thủ Dầu Một', 0, 'ENABLE', '2024-10-17 16:25:54.000000', NULL),
-(22, 'Xã Ba Trại, Ba Vì, Hà Nội', '2024-10-17 16:25:54.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Hùng Hạnh', 0, 'ENABLE', '2024-10-17 16:25:54.000000', NULL),
-(23, '56 Nguyễn Lương Bằng, Phường Đạt Hiếu, Thị Xã Buôn Hồ, Đắk Lắk', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Phú Gia', 0, 'ENABLE', '2024-10-17 16:25:55.000000', NULL),
-(24, 'Xã Chu Minh, Ba Vì, Hà Nội', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Tùng Anh', 0, 'ENABLE', '2024-10-17 16:25:55.000000', NULL),
-(25, 'Cao Duệ, Xã Nhật Tân, Huyện Gia Lộc, Hải Dương', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Nhân Tạo Nhật Tân', 0, 'ENABLE', '2024-10-17 16:25:55.000000', NULL),
-(26, '126 Lại Hùng Cường, Xã Vĩnh Lộc B, Huyện Bình Chánh, Hồ Chí Minh', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Thanh Thảo Sports', 0, 'ENABLE', '2024-10-17 16:25:55.000000', NULL),
-(27, 'Phường Cao Xanh, Thành phố Hạ Long, Quảng Ninh', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng 88 New Star', 0, 'ENABLE', '2024-10-17 16:25:55.000000', NULL),
-(28, '4 Đường Kênh Số 4, Phường Tân Tạo A, Quận Bình Tân, Hồ Chí Minh', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá - Phủi Bình Tân', 0, 'ENABLE', '2024-10-17 16:25:55.000000', NULL),
-(29, '123 Quảng Oai, Thị trấn Tây Đằng, Ba Vì, Hà Nội', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân vận động Quảng Oai', 0, 'ENABLE', '2024-10-17 16:25:55.000000', NULL),
-(30, '39 Ng. 76 An Dương, Phường Tứ Liên, Tây Hồ, Hà Nội', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng La Thành - Tây Hồ', 0, 'ENABLE', '2024-10-17 16:25:55.000000', NULL),
-(31, 'Ngõ 95 P. Chùa Bộc, Phường Trung Liệt, Quận Đống Đa, Hà Nội', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá đại học Thủy Lợi', 0, 'ENABLE', '2024-10-17 16:25:55.000000', NULL),
-(32, 'Đường Số 10, Xã Phước Thiền, Huyện Nhơn Trạch, Đồng Nai', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá KCN Nhơn Trạch 6', 0, 'ENABLE', '2024-10-17 16:25:55.000000', NULL),
-(33, 'Thôn 3, Xã Bù Gia Mập, Huyện Bù Gia Mập, Bình Phước', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Hoàng Nam', 0, 'ENABLE', '2024-10-17 16:25:55.000000', NULL),
-(34, 'Thôn Tri Lễ, Thị trấn Phú Xuyên, Phú Xuyên, Hà Nội', '2024-10-17 16:27:48.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Lan Anh huyện Phú Xuyên', 0, 'ENABLE', '2024-10-17 16:27:48.000000', NULL),
-(35, '335/1 Tổ 1 KP1, Phường Thạnh Xuân, Quận 12, Hồ Chí Minh', '2024-10-17 16:27:48.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá BSG', 0, 'ENABLE', '2024-10-17 16:27:48.000000', NULL),
-(36, 'Tổ khu phố 8, Thị trấn Cát Tiên, Huyện Cát Tiên, Lâm Đồng', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Lan Anh huyện Cát Tiên', 0, 'ENABLE', '2024-10-17 16:27:49.000000', NULL),
-(37, '8/5 ấp 2, Xã Xuân Thới Thượng, Huyện Hóc Môn, Hồ Chí Minh', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Anh Huy', 0, 'ENABLE', '2024-10-17 16:27:49.000000', NULL),
-(38, 'Sau sân Thắng Lợi 68, Xã Xuân Thới Thượng, Huyện Hóc Môn, Hồ Chí Minh', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Heli', 0, 'ENABLE', '2024-10-17 16:27:49.000000', NULL),
-(39, 'ấp 5, Xã Đức Hòa Đông, Huyện Đức Hòa, Long An', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Thảo VY', 0, 'ENABLE', '2024-10-17 16:27:49.000000', NULL),
-(40, '168 Phan Văn Hớn, Xã Xuân Thới Thượng, Huyện Hóc Môn, Hồ Chí Minh', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Cỏ Nhân Tạo Thắng Lợi 68', 0, 'ENABLE', '2024-10-17 16:27:49.000000', NULL),
-(41, 'JMCR+PX4, đê Ông Sâu, ấp Phước Thới, Cần Giuộc, Thị trấn Cần Giuộc, Huyện Cần Giuộc, Long An', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Ông Sâu', 0, 'ENABLE', '2024-10-17 16:27:49.000000', NULL),
-(42, 'Khu công nghiệp Bá Thiện - Phân khu I, Xã Thiện Kế, Bình Xuyên, Vĩnh Phúc', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Thiện Kế', 0, 'ENABLE', '2024-10-17 16:27:49.000000', NULL),
-(43, 'Mai Thị Út, Xã Tam Bình, Huyện Cai Lậy, Tiền Giang', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng - hồ bơi Văn Nam', 0, 'ENABLE', '2024-10-17 16:27:49.000000', NULL),
-(44, 'Chung Cư Đồng Phát, Khu Đô Thị Vĩnh Hoàng, Phường Vĩnh Hưng, Hoàng Mai, Hà Nội', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng HLP - Đồng Phát Vĩnh Hoàng', 0, 'ENABLE', '2024-10-17 16:27:49.000000', NULL),
-(45, 'Phước Lâm, Thị trấn Cần Giuộc, Huyện Cần Giuộc, Long An', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Vạn Lợi', 0, 'ENABLE', '2024-10-17 16:27:49.000000', NULL),
-(46, '43 Đ. Dũng Sĩ Thanh Khê, Phường Thanh Khê Tây, Quận Thanh Khê, Đà Nẵng', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Trung Ương 3', 0, 'ENABLE', '2024-10-17 16:27:49.000000', NULL),
-(47, 'Ấp Bắc, Thị trấn Cần Giuộc, Huyện Cần Giuộc, Long An', '2024-10-17 16:27:50.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Hồng Nguyên Phát', 0, 'ENABLE', '2024-10-17 16:27:50.000000', NULL),
-(48, '7 P .Nguyễn Tư Giản, Phường Phúc Tân, Hoàn Kiếm, Hà Nội', '2024-10-17 16:27:50.000000', 'Turf Description', 21.028511, 105.804820, 'Trung Tâm Thể Dục Thể Thao Quận Hoàn Kiếm', 0, 'ENABLE', '2024-10-17 16:27:50.000000', NULL),
-(49, '7B Tân Phú, Phường Phú Mỹ, Quận 7, Hồ Chí Minh', '2024-10-17 16:27:50.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng D7 SP (UBND Q7)', 0, 'ENABLE', '2024-10-17 16:27:50.000000', NULL),
-(50, 'ĐT 825, Xã Đức Hòa Đông, Huyện Đức Hòa, Long An', '2024-10-17 16:28:27.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Châu Anh Phát', 0, 'ENABLE', '2024-10-17 16:28:27.000000', NULL),
-(51, 'QL57C, Xã Sơn Đông, Thành phố Bến Tre, Bến Tre', '2024-10-17 16:28:28.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Dừa Lửa', 0, 'ENABLE', '2024-10-17 16:28:28.000000', NULL),
-(52, '62 Trịnh Quang Nghị, Phường 4, Thành phố Tân An, Long An', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng mini Quả Bóng Vàng', 0, 'ENABLE', '2024-10-17 16:28:29.000000', NULL),
-(53, 'Cự Đà, Xã Cự Khê, Thanh Oai, Hà Nội', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Cự Đà', 0, 'ENABLE', '2024-10-17 16:28:29.000000', NULL),
-(54, 'Nguyễn Địa Lô, Phường Cửa Ông, Thành phố Cẩm Phả, Quảng Ninh', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá 24/7', 0, 'ENABLE', '2024-10-17 16:28:29.000000', NULL),
-(55, '51/5B Ấp Vĩnh Xuân A, Xã Dương Xuân Hội, Huyện Châu Thành, Long An', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini Phát Đạt', 0, 'ENABLE', '2024-10-17 16:28:29.000000', NULL),
-(56, '1 Đường D5, Phường Sơn Kỳ, Quận Tân Phú, Hồ Chí Minh', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá trường Lê Trọng Tấn', 0, 'ENABLE', '2024-10-17 16:28:29.000000', NULL),
-(57, 'đường cây da , khu phố tân phú 2, Phường Tân Bình, Thị xã Dĩ An, Bình Dương', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Hùm Vàng', 0, 'ENABLE', '2024-10-17 16:28:29.000000', NULL),
-(58, 'Kim Đồng, Phường Hưng Bình, Thành phố Vinh, Nghệ An', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá phường Hưng Bình', 0, 'ENABLE', '2024-10-17 16:28:29.000000', NULL),
-(59, 'Long Thượng, Cần Giuộc, Xã Long Thượng, Huyện Cần Giuộc, Long An', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'San bóng Long Thượng', 0, 'ENABLE', '2024-10-17 16:28:29.000000', NULL),
-(60, 'DT827A, Xã Thuận Mỹ, Huyện Châu Thành, Long An', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Cường Quỳnh Sport', 0, 'ENABLE', '2024-10-17 16:28:29.000000', NULL),
-(61, 'Huỳnh Ngọc Huệ, Phường Trần Quang Diệu, Thành phố Qui Nhơn, Bình Định', '2024-10-17 16:28:30.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá trạm 4', 0, 'ENABLE', '2024-10-17 16:28:30.000000', NULL),
-(62, 'Thôn Gò Pháo, Xã Hợp Thịnh, Huyện Hiệp Hòa, Bắc Giang', '2024-10-17 16:28:30.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Old Trafford', 0, 'ENABLE', '2024-10-17 16:28:30.000000', NULL),
-(63, '1 Đ. Hoàng Minh Giám, Phường Trung Hoà, Cầu Giấy, Hà Nội', '2024-10-17 16:28:30.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Sơn Trang 2', 0, 'ENABLE', '2024-10-17 16:28:30.000000', NULL),
-(64, 'Ngõ Lông Vũ, Phường Máy Chai, Quận Ngô Quyền, Hải Phòng', '2024-10-17 16:28:30.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Lông Vũ', 0, 'ENABLE', '2024-10-17 16:28:30.000000', NULL),
-(65, 'Tổ 6, Khu Phố 7, Phường Uyên Hưng, Thị xã Tân Uyên, Bình Dương', '2024-10-17 16:28:30.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng K7 Sport', 0, 'ENABLE', '2024-10-17 16:28:30.000000', NULL),
-(66, 'Công viên Sử Tử - Vịnh An Hòa City, Xã Tam Hiệp, Huyện Núi Thành, Quảng Nam', '2024-10-17 16:43:13.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Vịnh An Hoà', 0, 'ENABLE', '2024-10-17 16:43:13.000000', NULL),
-(67, '108 Hùng Vương, Thị trấn Đông Phú, Huyện Quế Sơn, Quảng Nam', '2024-10-17 16:43:13.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng cỏ nhân tạo Cây Thị', 0, 'ENABLE', '2024-10-17 16:43:13.000000', NULL),
-(68, 'Thôn 5, Duy nghĩa, Xã Duy Nghĩa, Huyện Duy Xuyên, Quảng Nam', '2024-10-17 16:43:13.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Mini Gia Khiêm Sports', 0, 'ENABLE', '2024-10-17 16:43:13.000000', NULL),
-(69, 'Ngõ 104 P. Nguyễn An Ninh, Phường Tương Mai, Hoàng Mai, Hà Nội', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Minh Kiệt - Hoàng Mai', 0, 'ENABLE', '2024-10-17 16:43:14.000000', NULL),
-(70, 'Quang Trung, Xã Tam Vinh, Huyện Phú Ninh, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân vận động huyện Phú Ninh', 0, 'ENABLE', '2024-10-17 16:43:14.000000', NULL),
-(71, '18 Trần Thuyết, Phường An Sơn, Thành phố Tam Kỳ, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá An Sơn', 0, 'ENABLE', '2024-10-17 16:43:14.000000', NULL),
-(72, 'Đường DH1, Xã Tam Thành, Huyện Phú Ninh, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân thể thao Xóm Mới TĐC Cao Tốc', 0, 'ENABLE', '2024-10-17 16:43:14.000000', NULL),
-(73, 'hai mươi bốn tháng ba, Phường An Xuân, Thành phố Tam Kỳ, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Mường Thanh', 0, 'ENABLE', '2024-10-17 16:43:14.000000', NULL),
-(74, 'Thanh Niên, Xã Duy Hải, Huyện Duy Xuyên, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Ngô Quyền', 0, 'ENABLE', '2024-10-17 16:43:14.000000', NULL),
-(75, 'gần D8, Xã An Điền, Thị xã Bến Cát, Bình Dương', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Nhật Anh - Bến Cát', 0, 'ENABLE', '2024-10-17 16:43:14.000000', NULL),
-(76, 'Nguyễn Trãi, Xã Điện Thắng Nam, Thị xã Điện Bàn, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá cỏ nhân tạo Minh Khang', 0, 'ENABLE', '2024-10-17 16:43:14.000000', NULL),
-(77, 'Sân vận động xã, Xã Hương An, Huyện Quế Sơn, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Khu thể thao Nhất Tâm', 0, 'ENABLE', '2024-10-17 16:43:14.000000', NULL),
-(78, 'Đ. Nguyễn Thị Đặng, Phường Hiệp Thành, Quận 12, Hồ Chí Minh', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng MiNi Hiệp Thành', 0, 'ENABLE', '2024-10-17 16:43:14.000000', NULL),
-(79, '09A Đường Phố Cù Chính Lan, Phường Bắc Cường, Thành phố Lào Cai, Lào Cai', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng đá Bắc Cường', 0, 'ENABLE', '2024-10-17 16:43:14.000000', NULL),
-(80, '339 Đ. Trần Hưng Đạo, Phường Điện Ngọc, Thị xã Điện Bàn, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Ngọc Vinh', 0, 'ENABLE', '2024-10-17 16:43:14.000000', NULL),
-(81, '300 Đ. Nguyễn Xiển, Xã Tân Triều, Thanh Trì, Hà Nội', '2024-10-17 16:43:15.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Hà Nội Green ', 0, 'ENABLE', '2024-10-17 16:43:15.000000', NULL),
-(82, '84 Nguyễn Biểu, Phường Vĩnh Hải, Thành phố Nha Trang, Khánh Hòa', '2024-10-17 16:43:30.000000', 'Turf Description', 21.028511, 105.804820, 'Sân cỏ nhân tạo Alpha - Nguyễn Biểu', 0, 'ENABLE', '2024-10-17 16:43:30.000000', NULL),
-(83, 'Đ. Số 4, Phường Tân Phước Khánh, Thị xã Tân Uyên, Bình Dương', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Thái Bình Dương - Tân Uyên', 0, 'ENABLE', '2024-10-17 16:43:31.000000', NULL),
-(84, 'Lê Hồng Phong, Thị trấn Lương Sơn, Huyện Bắc Bình, Bình Thuận', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Nhân Tạo T&T', 0, 'ENABLE', '2024-10-17 16:43:31.000000', NULL),
-(85, 'QL55, Xã Đức Thuận, Huyện Tánh Linh, Bình Thuận', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Mini Lâm Nam', 0, 'ENABLE', '2024-10-17 16:43:31.000000', NULL),
-(86, 'khu Phố Rẫy, Xã Tân Lý Đông, Huyện Châu Thành, Tiền Giang', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá huyện Châu Thành', 0, 'ENABLE', '2024-10-17 16:43:31.000000', NULL),
-(87, 'Hàn Thuyên, Thị trấn Liên Nghĩa, Huyện Đức Trọng, Lâm Đồng', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân banh Nam Sơn', 0, 'ENABLE', '2024-10-17 16:43:31.000000', NULL),
-(88, 'Thôn 1, Xã Tân Phúc, Huyện Hàm Tân, Bình Thuận', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Than Lửa Đỏ', 0, 'ENABLE', '2024-10-17 16:43:31.000000', NULL),
-(89, 'Đ Trần Đức Thảo, Phường Phước Long A, Thành phố Thủ Đức, Hồ Chí Minh', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Đại Học Văn Hóa TP.HCM Cơ Sở 2', 0, 'ENABLE', '2024-10-17 16:43:31.000000', NULL),
-(90, '34 P. Tạ Quang Bửu, Phường Bách Khoa, Hai Bà Trưng, Hà Nội', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Kí túc xá Đại học Bách Khoa Hà Nội', 0, 'ENABLE', '2024-10-17 16:43:31.000000', NULL),
-(91, 'Thương Châu, Xã Ngũ Phụng, Huyện Phú Quí, Bình Thuận', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini Thường Châu', 0, 'ENABLE', '2024-10-17 16:43:31.000000', NULL),
-(92, '63 Phùng Hưng, Phường Lộc Tiến, Thành phố Bảo Lộc, Lâm Đồng', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Minh Quân', 0, 'ENABLE', '2024-10-17 16:43:31.000000', NULL),
-(93, 'Khu phố 1tan Phước, Xã Phước Lập, Huyện Tân Phước, Tiền Giang', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng minin Phúc Thịnh', 0, 'ENABLE', '2024-10-17 16:43:31.000000', NULL),
-(94, '38 Trần Nguyên Hãn, Phường 2, Thành phố Bảo Lộc, Lâm Đồng', '2024-10-17 16:43:32.000000', 'Turf Description', 21.028511, 105.804820, 'HD SPORT - Sân bóng cỏ nhân tạo', 0, 'ENABLE', '2024-10-17 16:43:32.000000', NULL),
-(95, 'Đường Huyện 87, Khu Phố 2, Phường 9, Xã Tân Mỹ Chánh, Thành phố Mỹ Tho, Tiền Giang', '2024-10-17 16:43:32.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Cỏ Nhân Tạo Tân Mỹ Chánh', 0, 'ENABLE', '2024-10-17 16:43:32.000000', NULL),
-(96, 'QL1A, Tân Hương, Xã Tân Hương, Huyện Châu Thành, Tiền Giang', '2024-10-17 16:43:32.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Trọng Nghĩa Sports - Tân Hương - Tiền Giang', 0, 'ENABLE', '2024-10-17 16:43:32.000000', NULL),
-(97, 'Bình Phong, Xã Tân Mỹ Chánh, Thành phố Mỹ Tho, Tiền Giang', '2024-10-17 16:43:32.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Cửu Long FC', 0, 'ENABLE', '2024-10-17 16:43:32.000000', NULL),
-(98, 'Cột 5, Phường Hồng Hà, Thành phố Hạ Long, Quảng Ninh', '2024-10-17 16:43:42.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Vũ Đại Dương Hạ Long', 0, 'ENABLE', '2024-10-17 16:43:42.000000', NULL),
-(99, 'Đ.P.Đức Chính, Xã Long Hưng, Huyện Văn Giang, Hưng Yên', '2024-10-17 16:43:42.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Long Hưng', 0, 'ENABLE', '2024-10-17 16:43:42.000000', NULL),
-(100, 'Nguyễn Thị Định, Xã Thạnh Đông, Huyện Tân Châu, Tây Ninh', '2024-10-17 16:43:42.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng mini cỏ nhân tạo Hữu Hạnh', 0, 'ENABLE', '2024-10-17 16:43:42.000000', NULL),
-(101, 'P. Nguyễn Lân, Phường Khương Mai, Thanh Xuân, Hà Nội', '2024-10-17 16:43:42.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Đoan Môn', 0, 'ENABLE', '2024-10-17 16:43:42.000000', NULL),
-(102, 'Khu phố 3, Thị trấn Châu Thành, Huyện Châu Thành, Tây Ninh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Vũ Hoàng FS', 0, 'ENABLE', '2024-10-17 16:43:43.000000', NULL),
-(103, '52 D. Thị Mười, Phường Tân Hưng Thuận, Quận 12, Hồ Chí Minh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Sài Gòn FC Quận 12', 0, 'ENABLE', '2024-10-17 16:43:43.000000', NULL),
-(104, '39PV+XGH, Lộc Phước, Xã Lộc Hưng, Huyện Trảng Bàng, Tây Ninh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Lộc Phước', 0, 'ENABLE', '2024-10-17 16:43:43.000000', NULL),
-(105, '56 Đường số 22, Xã Thạnh Đức, Huyện Gò Dầu, Tây Ninh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Mini Phát Đạt', 0, 'ENABLE', '2024-10-17 16:43:43.000000', NULL),
-(106, '56/4 Khu phố 2, Phường An Bình, Biên Hòa, Đồng Nai', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá An Bình', 0, 'ENABLE', '2024-10-17 16:43:43.000000', NULL),
-(107, 'Đường 3, Xã Thạch Lưu, Huyện Thạch Hà, Hà Tĩnh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Lưu Vĩnh Sơn (LVS Sports)', 0, 'ENABLE', '2024-10-17 16:43:43.000000', NULL),
-(108, '210 Huỳnh Tấn Phát, Phường Hiệp Ninh, Thành phố Tây Ninh, Tây Ninh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng mini Thư Giãn', 0, 'ENABLE', '2024-10-17 16:43:43.000000', NULL),
-(109, 'Phường Khương Đình, Thanh Xuân, Hà Nội', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Đầm Hồng 1', 0, 'ENABLE', '2024-10-17 16:43:43.000000', NULL),
-(110, 'Trường Cao Đẳng Duyên Hải, 109 đường Trường Chinh, Phường Quán Trữ, Quận Kiến An, Hải Phòng', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Cao Đẳng Duyên Hải', 0, 'ENABLE', '2024-10-17 16:43:43.000000', NULL),
-(111, 'Thạch Linh 1, Phường Thạch Linh, Thành phố Hà Tĩnh, Hà Tĩnh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng trường Y tế', 0, 'ENABLE', '2024-10-17 16:43:43.000000', NULL),
-(112, '221 Lý Thường Kiệt, Phường 09, Quận 11, Hồ Chí Minh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân vận động Phú Thọ', 0, 'ENABLE', '2024-10-17 16:43:43.000000', NULL),
-(113, 'Đối Diện Bãi Giữ Xe Vi Phạm Giao Thông BD, Đường ĐX-040, Phường Phú Mỹ, Thành phố Thủ Dầu Một, Bình Dương', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Minh Tâm TP Thủ Dầu Một', 0, 'ENABLE', '2024-10-17 16:43:43.000000', NULL),
-(114, 'ĐT725, Xã Hoài Đức, Huyện Lâm Hà, Lâm Đồng', '2024-10-17 16:43:50.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini Trường Híp', 0, 'ENABLE', '2024-10-17 16:43:50.000000', NULL),
-(115, '90-92 Nguyễn Trãi, Phường 4, Thành phố Tây Ninh, Tây Ninh', '2024-10-17 16:43:51.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini Thái Bình Dương', 0, 'ENABLE', '2024-10-17 16:43:51.000000', NULL),
-(116, 'QL27, Xã Đạ K\' Nàng, Huyện Đam Rông, Lâm Đồng', '2024-10-17 16:43:51.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Phi Liêng', 0, 'ENABLE', '2024-10-17 16:43:51.000000', NULL),
-(117, 'Trung tâm văn hoá huyện, Xã Liêng Srônh, Huyện Đam Rông, Lâm Đồng', '2024-10-17 16:43:51.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini - Cung Thiếu Nhi', 0, 'ENABLE', '2024-10-17 16:43:51.000000', NULL),
-(118, 'Hẻm Xô Viết Nghệ Tĩnh, Phường 7, Thành phố Đà Lạt, Lâm Đồng', '2024-10-17 16:43:51.000000', 'Turf Description', 21.028511, 105.804820, 'Sân vận động Lâm Đồng', 0, 'ENABLE', '2024-10-17 16:43:51.000000', NULL),
-(119, 'Liên Đầm, Thị trấn Di Linh, Huyện Di Linh, Lâm Đồng', '2024-10-17 16:43:51.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini Phát', 0, 'ENABLE', '2024-10-17 16:43:51.000000', NULL),
-(120, 'Xã Phùng Xá, Thạch Thất, Hà Nội', '2024-10-17 16:43:51.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá công ty điện tử Meiko', 0, 'ENABLE', '2024-10-17 16:43:51.000000', NULL),
-(121, '241 Lý Thái Tổ, Xã Đạm Bri, Thành phố Bảo Lộc, Lâm Đồng', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mIni Quang Vinh', 0, 'ENABLE', '2024-10-17 16:43:52.000000', NULL),
-(122, 'Quốc lộ 39B, Xã Ngô Quyền, Huyện Tiên Lữ, Hưng Yên', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng nhân tạo Tiên Lữ (Totti Stadium)', 0, 'ENABLE', '2024-10-17 16:43:52.000000', NULL),
-(123, '148 Lê Lợi, Thị trấn Hòa Thành, Huyện Hòa Thành, Tây Ninh', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini Hoà Thành', 0, 'ENABLE', '2024-10-17 16:43:52.000000', NULL),
-(124, '5 Đặng Xuân Thiều, Phường Vị Hoàng, Thành phố Nam Định, Nam Định', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Thiên Trường', 0, 'ENABLE', '2024-10-17 16:43:52.000000', NULL),
-(125, 'Thôn 1, Thị trấn Di Linh, Huyện Di Linh, Lâm Đồng', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Cây Điệp', 0, 'ENABLE', '2024-10-17 16:43:52.000000', NULL),
-(126, '99 Hùng Vương, Thị trấn Krông Năng, Huyện Krông Năng, Đắk Lắk', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Phước Hùng', 0, 'ENABLE', '2024-10-17 16:43:52.000000', NULL),
-(127, 'Ấp Trâm vàng 2, Xã Thanh Phước, Huyện Gò Dầu, Tây Ninh', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Ngọc Mai', 0, 'ENABLE', '2024-10-17 16:43:52.000000', NULL),
-(128, '32 Nguyễn Du, Thị trấn Ma Đa Guôi, Huyện Đạ Huoai, Lâm Đồng', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Vườn Tràm', 0, 'ENABLE', '2024-10-17 16:43:52.000000', NULL),
-(129, 'thôn 9, Thị trấn Di Linh, Huyện Di Linh, Lâm Đồng', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng mini Tân Châu', 0, 'ENABLE', '2024-10-17 16:43:52.000000', NULL),
-(130, '13 Hồ Quý Ly, Phường Thắng Tam, Thành phố Vũng Tàu, Bà Rịa - Vũng Tàu', '2024-10-17 16:43:58.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini khách sạn Cao Su', 0, 'ENABLE', '2024-10-17 16:43:58.000000', NULL),
-(131, 'Nhà văn hóa phường Thạch Bàn, Phường Thạch Bàn, Long Biên, Hà Nội', '2024-10-17 16:43:59.000000', 'Turf Description', 21.022379, 105.910723, 'Sân bóng Hồ Thạch Bàn', 0, 'ENABLE', '2024-10-17 16:43:59.000000', NULL),
-(132, 'Sân bóng đá Hoàng Anh, Phường Khánh Xuân, Thành phố Buôn Ma Thuột, Đắk Lắk', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Hoàng Anh', 0, 'ENABLE', '2024-10-17 16:43:59.000000', NULL),
-(133, 'Đường 302C, Xã Thiện Kế, Bình Xuyên, Vĩnh Phúc', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Cỏ Nhân Tạo Trong Nhà Bá Thiện', 0, 'ENABLE', '2024-10-17 16:43:59.000000', NULL),
-(134, 'Thôn Cốc Lâm, Xã Bình Định, Huyện Yên Lạc, Vĩnh Phúc', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Nam Hải', 0, 'ENABLE', '2024-10-17 16:43:59.000000', NULL),
-(135, 'LK28-28 Đ. Số 6, KĐT Mỹ Gia, Nha Trang, Khánh Hòa, Xã Vĩnh Thái, Thành phố Nha Trang, Khánh Hòa', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Mini Mỹ Gia 3', 0, 'ENABLE', '2024-10-17 16:43:59.000000', NULL),
-(136, '15a Đ. Hồng Hà, Phường Phúc Xá, Ba Đình, Hà Nội', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng 10-10', 0, 'ENABLE', '2024-10-17 16:43:59.000000', NULL),
-(137, 'Starlake, Sân Bóng Dewey, Phường Xuân Tảo, Bắc Từ Liêm, Hà Nội', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Dewey', 0, 'ENABLE', '2024-10-17 16:43:59.000000', NULL),
-(138, 'Thôn Đông Lao, Xã Đông La, Hoài Đức, Hà Nội', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đông Lao', 0, 'ENABLE', '2024-10-17 16:43:59.000000', NULL),
-(139, 'Đ.Lê Quang Đạo, Phường Mễ Trì, Nam Từ Liêm, Hà Nội', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân cỏ nhân tạo Trung tâm đào tạo bóng đá trẻ VYF', 0, 'ENABLE', '2024-10-17 16:43:59.000000', NULL),
-(140, 'Đ. Hùng Vương, Phường Thọ Sơn, Thành phố Việt Trì, Phú Thọ', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân vận động tỉnh Phú Thọ', 0, 'ENABLE', '2024-10-17 16:43:59.000000', NULL),
-(141, '401 DX 047 Ấp Lồ Ồ, Xã An Tây, Thị xã Bến Cát, Bình Dương', '2024-10-17 16:44:00.000000', 'Turf Description', 11.091200, 106.538071, 'Sân bóng Hà Thành', 0, 'ENABLE', '2024-10-17 16:44:00.000000', NULL),
-(142, '17 Hoàng Thế Thiện, Phường An Lợi Đông, Phường Thủ Thiêm , Thành phố Thủ Đức, Hồ Chí Minh', '2024-10-17 16:44:00.000000', 'Turf Description', 10.768090, 106.722620, 'Sân Vận Động Sala Đại Quang Minh', 0, 'ENABLE', '2024-10-17 16:44:00.000000', NULL),
-(143, 'Đ. Lê Lợi, Phường Cái Khế, Quận Ninh Kiều, Cần Thơ', '2024-10-17 16:44:00.000000', 'Turf Description', 10.046410, 105.788990, 'Sân vận động Cần Thơ', 0, 'ENABLE', '2024-10-17 16:44:00.000000', NULL),
-(144, '206 Vườn Lài, Phường An Phú Đông, Quận 12, Hồ Chí Minh', '2024-10-17 16:44:00.000000', 'Turf Description', 10.842940, 106.693520, 'Sân bóng Tiến Trường Vườn Lài An Phú Đông', 0, 'ENABLE', '2024-10-17 16:44:00.000000', NULL),
-(145, 'Ngõ 22 Nhuệ Giang, Phường Tây Mỗ, Nam Từ Liêm, Hà Nội', '2024-10-17 16:44:00.000000', 'Turf Description', 21.016353, 105.746017, 'Sân bóng đá Coma 6', 0, 'ENABLE', '2024-10-17 16:44:00.000000', NULL);
+(2, '5 Đ. Đào Sư Tích, Xã Phước Kiển, Huyện Nhà Bè, Hồ Chí Minh', '2024-10-17 16:23:44.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá ALOHA', 0, 'ENABLE', '2024-10-17 16:23:44.000000', 3),
+(3, '85 Ngõ 180 Đường Đình Thôn, Phường Mỹ Đình 1, Nam Từ Liêm, Hà Nội', '2024-10-17 16:24:33.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Đình Thôn 2', 0, 'ENABLE', '2024-10-17 16:24:33.000000', 4),
+(4, '99 Đ. Nguyễn Trường Tộ, Phường Bình Khánh, Thành phố Long Xuyên, An Giang', '2024-10-17 16:24:33.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Minh Khôi', 0, 'ENABLE', '2024-10-17 16:24:33.000000', 4),
+(5, '147 Nguyễn Đức Thuận, Phường 13, Quận Tân Bình, Hồ Chí Minh', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá K3', 0, 'ENABLE', '2024-10-17 16:24:34.000000', 5),
+(6, '35 Phan Bội Châu, Phường 1, Thành phố Vũng Tàu, Bà Rịa - Vũng Tàu', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá CV9 - Vũng Tàu', 0, 'ENABLE', '2024-10-17 16:24:34.000000', 5),
+(7, 'Khu đô thị Văn Quán, Phường Văn Quán, Hà Đông, Hà Nội', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Zone9 Văn Quán', 0, 'ENABLE', '2024-10-17 16:24:34.000000', 4),
+(8, 'Sân Bóng đá mini Quang Tuyến, Xã Mỹ Thạnh, Huyện Thủ Thừa, Long An', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng đá mini Quang Tuyến', 0, 'ENABLE', '2024-10-17 16:24:34.000000', 3),
+(9, 'Đinh Tiên Hoàng, Phường Thanh Châu, Thành phố Phủ Lý, Hà Nam', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Thành Danh - Hà Nam', 0, 'ENABLE', '2024-10-17 16:24:34.000000', 5),
+(10, 'Sân Bóng Sơn Tây Mansion, Xã Cổ Đông, Sơn Tây, Hà Nội', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Sơn Tây Mansion', 0, 'ENABLE', '2024-10-17 16:24:34.000000', 5),
+(11, '63 Nguyễn Huy Tưởng, Phường Thanh Xuân Trung, Thanh Xuân, Hà Nội', '2024-10-17 16:24:34.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng 63 - Hà Nội', 0, 'ENABLE', '2024-10-17 16:24:34.000000', 3),
+(12, 'Thủ Đức, Hồ Chí Minh, Phường Linh Trung, Thành phố Thủ Đức, Hồ Chí Minh', '2024-10-17 16:24:35.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Năm Nhỏ', 0, 'ENABLE', '2024-10-17 16:24:35.000000', 4),
+(13, '26 Xô Viết Nghệ Tĩnh, Phường 7, Thành phố Đà Lạt, Lâm Đồng', '2024-10-17 16:24:35.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng 139 Đà Lạt', 0, 'ENABLE', '2024-10-17 16:24:35.000000', 4),
+(14, 'Đường số 2 Gamuda Gardens, Phường Trần Phú, Hoàng Mai, Hà Nội', '2024-10-17 16:24:35.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá The One Gamuda', 0, 'ENABLE', '2024-10-17 16:24:35.000000', 5),
+(15, 'Xã Thanh Thùy, Thanh Oai, Hà Nội', '2024-10-17 16:24:35.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng cỏ nhân tạo Thanh Thùy', 0, 'ENABLE', '2024-10-17 16:24:35.000000', 5),
+(16, 'Xã Cao Viên, Thanh Oai, Hà Nội', '2024-10-17 16:24:35.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng cỏ nhân tạo Cao Viên', 0, 'ENABLE', '2024-10-17 16:24:35.000000', 4),
+(17, 'Bac Rach Chiec, Phường Phước Long A, Quận 9, Hồ Chí Minh', '2024-10-17 16:24:35.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá SACA Arena', 0, 'ENABLE', '2024-10-17 16:24:35.000000', 3),
+(18, '324 Chu Văn An, Phường 12, Quận Bình Thạnh, Hồ Chí Minh', '2024-10-17 16:25:54.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá HCA', 0, 'ENABLE', '2024-10-17 16:25:54.000000', 4),
+(19, 'Sân bóng Thượng Mỗ, Xã Thượng Mỗ, Đan Phượng, Hà Nội', '2024-10-17 16:25:54.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Thượng Mỗ', 0, 'ENABLE', '2024-10-17 16:25:54.000000', 4),
+(20, 'Khu đô thị Cao Xanh, Phường Cao Xanh, Thành phố Hạ Long, Quảng Ninh', '2024-10-17 16:25:54.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá 88 Newstar', 0, 'ENABLE', '2024-10-17 16:25:54.000000', 3),
+(21, 'Sân bóng Thiên An, Phường Định Hoà, Thành phố Thủ Dầu Một, Bình Dương', '2024-10-17 16:25:54.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Thiên An - Thủ Dầu Một', 0, 'ENABLE', '2024-10-17 16:25:54.000000', 3),
+(22, 'Xã Ba Trại, Ba Vì, Hà Nội', '2024-10-17 16:25:54.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Hùng Hạnh', 0, 'ENABLE', '2024-10-17 16:25:54.000000', 3),
+(23, '56 Nguyễn Lương Bằng, Phường Đạt Hiếu, Thị Xã Buôn Hồ, Đắk Lắk', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Phú Gia', 0, 'ENABLE', '2024-10-17 16:25:55.000000', 4),
+(24, 'Xã Chu Minh, Ba Vì, Hà Nội', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Tùng Anh', 0, 'ENABLE', '2024-10-17 16:25:55.000000', 5),
+(25, 'Cao Duệ, Xã Nhật Tân, Huyện Gia Lộc, Hải Dương', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Nhân Tạo Nhật Tân', 0, 'ENABLE', '2024-10-17 16:25:55.000000', 4),
+(26, '126 Lại Hùng Cường, Xã Vĩnh Lộc B, Huyện Bình Chánh, Hồ Chí Minh', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Thanh Thảo Sports', 0, 'ENABLE', '2024-10-17 16:25:55.000000', 5),
+(27, 'Phường Cao Xanh, Thành phố Hạ Long, Quảng Ninh', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng 88 New Star', 0, 'ENABLE', '2024-10-17 16:25:55.000000', 5),
+(28, '4 Đường Kênh Số 4, Phường Tân Tạo A, Quận Bình Tân, Hồ Chí Minh', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá - Phủi Bình Tân', 0, 'ENABLE', '2024-10-17 16:25:55.000000', 3),
+(29, '123 Quảng Oai, Thị trấn Tây Đằng, Ba Vì, Hà Nội', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân vận động Quảng Oai', 0, 'ENABLE', '2024-10-17 16:25:55.000000', 3),
+(30, '39 Ng. 76 An Dương, Phường Tứ Liên, Tây Hồ, Hà Nội', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng La Thành - Tây Hồ', 0, 'ENABLE', '2024-10-17 16:25:55.000000', 4),
+(31, 'Ngõ 95 P. Chùa Bộc, Phường Trung Liệt, Quận Đống Đa, Hà Nội', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá đại học Thủy Lợi', 0, 'ENABLE', '2024-10-17 16:25:55.000000', 4),
+(32, 'Đường Số 10, Xã Phước Thiền, Huyện Nhơn Trạch, Đồng Nai', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá KCN Nhơn Trạch 6', 0, 'ENABLE', '2024-10-17 16:25:55.000000', 4),
+(33, 'Thôn 3, Xã Bù Gia Mập, Huyện Bù Gia Mập, Bình Phước', '2024-10-17 16:25:55.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Hoàng Nam', 0, 'ENABLE', '2024-10-17 16:25:55.000000', 5),
+(34, 'Thôn Tri Lễ, Thị trấn Phú Xuyên, Phú Xuyên, Hà Nội', '2024-10-17 16:27:48.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Lan Anh huyện Phú Xuyên', 0, 'ENABLE', '2024-10-17 16:27:48.000000', 3),
+(35, '335/1 Tổ 1 KP1, Phường Thạnh Xuân, Quận 12, Hồ Chí Minh', '2024-10-17 16:27:48.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá BSG', 0, 'ENABLE', '2024-10-17 16:27:48.000000', 5),
+(36, 'Tổ khu phố 8, Thị trấn Cát Tiên, Huyện Cát Tiên, Lâm Đồng', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Lan Anh huyện Cát Tiên', 0, 'ENABLE', '2024-10-17 16:27:49.000000', 5),
+(37, '8/5 ấp 2, Xã Xuân Thới Thượng, Huyện Hóc Môn, Hồ Chí Minh', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Anh Huy', 0, 'ENABLE', '2024-10-17 16:27:49.000000', 5),
+(38, 'Sau sân Thắng Lợi 68, Xã Xuân Thới Thượng, Huyện Hóc Môn, Hồ Chí Minh', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Heli', 0, 'ENABLE', '2024-10-17 16:27:49.000000', 3),
+(39, 'ấp 5, Xã Đức Hòa Đông, Huyện Đức Hòa, Long An', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Thảo VY', 0, 'ENABLE', '2024-10-17 16:27:49.000000', 5),
+(40, '168 Phan Văn Hớn, Xã Xuân Thới Thượng, Huyện Hóc Môn, Hồ Chí Minh', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Cỏ Nhân Tạo Thắng Lợi 68', 0, 'ENABLE', '2024-10-17 16:27:49.000000', 5),
+(41, 'JMCR+PX4, đê Ông Sâu, ấp Phước Thới, Cần Giuộc, Thị trấn Cần Giuộc, Huyện Cần Giuộc, Long An', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Ông Sâu', 0, 'ENABLE', '2024-10-17 16:27:49.000000', 4),
+(42, 'Khu công nghiệp Bá Thiện - Phân khu I, Xã Thiện Kế, Bình Xuyên, Vĩnh Phúc', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Thiện Kế', 0, 'ENABLE', '2024-10-17 16:27:49.000000', 3),
+(43, 'Mai Thị Út, Xã Tam Bình, Huyện Cai Lậy, Tiền Giang', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng - hồ bơi Văn Nam', 0, 'ENABLE', '2024-10-17 16:27:49.000000', 5),
+(44, 'Chung Cư Đồng Phát, Khu Đô Thị Vĩnh Hoàng, Phường Vĩnh Hưng, Hoàng Mai, Hà Nội', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng HLP - Đồng Phát Vĩnh Hoàng', 0, 'ENABLE', '2024-10-17 16:27:49.000000', 3),
+(45, 'Phước Lâm, Thị trấn Cần Giuộc, Huyện Cần Giuộc, Long An', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Vạn Lợi', 0, 'ENABLE', '2024-10-17 16:27:49.000000', 4),
+(46, '43 Đ. Dũng Sĩ Thanh Khê, Phường Thanh Khê Tây, Quận Thanh Khê, Đà Nẵng', '2024-10-17 16:27:49.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Trung Ương 3', 0, 'ENABLE', '2024-10-17 16:27:49.000000', 3),
+(47, 'Ấp Bắc, Thị trấn Cần Giuộc, Huyện Cần Giuộc, Long An', '2024-10-17 16:27:50.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Hồng Nguyên Phát', 0, 'ENABLE', '2024-10-17 16:27:50.000000', 4),
+(48, '7 P .Nguyễn Tư Giản, Phường Phúc Tân, Hoàn Kiếm, Hà Nội', '2024-10-17 16:27:50.000000', 'Turf Description', 21.028511, 105.804820, 'Trung Tâm Thể Dục Thể Thao Quận Hoàn Kiếm', 0, 'ENABLE', '2024-10-17 16:27:50.000000', 5),
+(49, '7B Tân Phú, Phường Phú Mỹ, Quận 7, Hồ Chí Minh', '2024-10-17 16:27:50.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng D7 SP (UBND Q7)', 0, 'ENABLE', '2024-10-17 16:27:50.000000', 5),
+(50, 'ĐT 825, Xã Đức Hòa Đông, Huyện Đức Hòa, Long An', '2024-10-17 16:28:27.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Châu Anh Phát', 0, 'ENABLE', '2024-10-17 16:28:27.000000', 3),
+(51, 'QL57C, Xã Sơn Đông, Thành phố Bến Tre, Bến Tre', '2024-10-17 16:28:28.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Dừa Lửa', 0, 'ENABLE', '2024-10-17 16:28:28.000000', 4),
+(52, '62 Trịnh Quang Nghị, Phường 4, Thành phố Tân An, Long An', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng mini Quả Bóng Vàng', 0, 'ENABLE', '2024-10-17 16:28:29.000000', 4),
+(53, 'Cự Đà, Xã Cự Khê, Thanh Oai, Hà Nội', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Cự Đà', 0, 'ENABLE', '2024-10-17 16:28:29.000000', 3),
+(54, 'Nguyễn Địa Lô, Phường Cửa Ông, Thành phố Cẩm Phả, Quảng Ninh', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá 24/7', 0, 'ENABLE', '2024-10-17 16:28:29.000000', 5),
+(55, '51/5B Ấp Vĩnh Xuân A, Xã Dương Xuân Hội, Huyện Châu Thành, Long An', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini Phát Đạt', 0, 'ENABLE', '2024-10-17 16:28:29.000000', 5),
+(56, '1 Đường D5, Phường Sơn Kỳ, Quận Tân Phú, Hồ Chí Minh', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá trường Lê Trọng Tấn', 0, 'ENABLE', '2024-10-17 16:28:29.000000', 3),
+(57, 'đường cây da , khu phố tân phú 2, Phường Tân Bình, Thị xã Dĩ An, Bình Dương', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Hùm Vàng', 0, 'ENABLE', '2024-10-17 16:28:29.000000', 5),
+(58, 'Kim Đồng, Phường Hưng Bình, Thành phố Vinh, Nghệ An', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá phường Hưng Bình', 0, 'ENABLE', '2024-10-17 16:28:29.000000', 4),
+(59, 'Long Thượng, Cần Giuộc, Xã Long Thượng, Huyện Cần Giuộc, Long An', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'San bóng Long Thượng', 0, 'ENABLE', '2024-10-17 16:28:29.000000', 3),
+(60, 'DT827A, Xã Thuận Mỹ, Huyện Châu Thành, Long An', '2024-10-17 16:28:29.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Cường Quỳnh Sport', 0, 'ENABLE', '2024-10-17 16:28:29.000000', 5),
+(61, 'Huỳnh Ngọc Huệ, Phường Trần Quang Diệu, Thành phố Qui Nhơn, Bình Định', '2024-10-17 16:28:30.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá trạm 4', 0, 'ENABLE', '2024-10-17 16:28:30.000000', 3),
+(62, 'Thôn Gò Pháo, Xã Hợp Thịnh, Huyện Hiệp Hòa, Bắc Giang', '2024-10-17 16:28:30.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Old Trafford', 0, 'ENABLE', '2024-10-17 16:28:30.000000', 3),
+(63, '1 Đ. Hoàng Minh Giám, Phường Trung Hoà, Cầu Giấy, Hà Nội', '2024-10-17 16:28:30.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Sơn Trang 2', 0, 'ENABLE', '2024-10-17 16:28:30.000000', 5),
+(64, 'Ngõ Lông Vũ, Phường Máy Chai, Quận Ngô Quyền, Hải Phòng', '2024-10-17 16:28:30.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Lông Vũ', 0, 'ENABLE', '2024-10-17 16:28:30.000000', 5),
+(65, 'Tổ 6, Khu Phố 7, Phường Uyên Hưng, Thị xã Tân Uyên, Bình Dương', '2024-10-17 16:28:30.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng K7 Sport', 0, 'ENABLE', '2024-10-17 16:28:30.000000', 3),
+(66, 'Công viên Sử Tử - Vịnh An Hòa City, Xã Tam Hiệp, Huyện Núi Thành, Quảng Nam', '2024-10-17 16:43:13.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Vịnh An Hoà', 0, 'ENABLE', '2024-10-17 16:43:13.000000', 3),
+(67, '108 Hùng Vương, Thị trấn Đông Phú, Huyện Quế Sơn, Quảng Nam', '2024-10-17 16:43:13.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng cỏ nhân tạo Cây Thị', 0, 'ENABLE', '2024-10-17 16:43:13.000000', 3),
+(68, 'Thôn 5, Duy nghĩa, Xã Duy Nghĩa, Huyện Duy Xuyên, Quảng Nam', '2024-10-17 16:43:13.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Mini Gia Khiêm Sports', 0, 'ENABLE', '2024-10-17 16:43:13.000000', 4),
+(69, 'Ngõ 104 P. Nguyễn An Ninh, Phường Tương Mai, Hoàng Mai, Hà Nội', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Minh Kiệt - Hoàng Mai', 0, 'ENABLE', '2024-10-17 16:43:14.000000', 3),
+(70, 'Quang Trung, Xã Tam Vinh, Huyện Phú Ninh, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân vận động huyện Phú Ninh', 0, 'ENABLE', '2024-10-17 16:43:14.000000', 5),
+(71, '18 Trần Thuyết, Phường An Sơn, Thành phố Tam Kỳ, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá An Sơn', 0, 'ENABLE', '2024-10-17 16:43:14.000000', 5),
+(72, 'Đường DH1, Xã Tam Thành, Huyện Phú Ninh, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân thể thao Xóm Mới TĐC Cao Tốc', 0, 'ENABLE', '2024-10-17 16:43:14.000000', 5),
+(73, 'hai mươi bốn tháng ba, Phường An Xuân, Thành phố Tam Kỳ, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Mường Thanh', 0, 'ENABLE', '2024-10-17 16:43:14.000000', 5),
+(74, 'Thanh Niên, Xã Duy Hải, Huyện Duy Xuyên, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Ngô Quyền', 0, 'ENABLE', '2024-10-17 16:43:14.000000', 4),
+(75, 'gần D8, Xã An Điền, Thị xã Bến Cát, Bình Dương', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Nhật Anh - Bến Cát', 0, 'ENABLE', '2024-10-17 16:43:14.000000', 3),
+(76, 'Nguyễn Trãi, Xã Điện Thắng Nam, Thị xã Điện Bàn, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá cỏ nhân tạo Minh Khang', 0, 'ENABLE', '2024-10-17 16:43:14.000000', 4),
+(77, 'Sân vận động xã, Xã Hương An, Huyện Quế Sơn, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Khu thể thao Nhất Tâm', 0, 'ENABLE', '2024-10-17 16:43:14.000000', 5),
+(78, 'Đ. Nguyễn Thị Đặng, Phường Hiệp Thành, Quận 12, Hồ Chí Minh', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng MiNi Hiệp Thành', 0, 'ENABLE', '2024-10-17 16:43:14.000000', 4),
+(79, '09A Đường Phố Cù Chính Lan, Phường Bắc Cường, Thành phố Lào Cai, Lào Cai', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng đá Bắc Cường', 0, 'ENABLE', '2024-10-17 16:43:14.000000', 3),
+(80, '339 Đ. Trần Hưng Đạo, Phường Điện Ngọc, Thị xã Điện Bàn, Quảng Nam', '2024-10-17 16:43:14.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Ngọc Vinh', 0, 'ENABLE', '2024-10-17 16:43:14.000000', 4),
+(81, '300 Đ. Nguyễn Xiển, Xã Tân Triều, Thanh Trì, Hà Nội', '2024-10-17 16:43:15.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Hà Nội Green ', 0, 'ENABLE', '2024-10-17 16:43:15.000000', 3),
+(82, '84 Nguyễn Biểu, Phường Vĩnh Hải, Thành phố Nha Trang, Khánh Hòa', '2024-10-17 16:43:30.000000', 'Turf Description', 21.028511, 105.804820, 'Sân cỏ nhân tạo Alpha - Nguyễn Biểu', 0, 'ENABLE', '2024-10-17 16:43:30.000000', 5),
+(83, 'Đ. Số 4, Phường Tân Phước Khánh, Thị xã Tân Uyên, Bình Dương', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Thái Bình Dương - Tân Uyên', 0, 'ENABLE', '2024-10-17 16:43:31.000000', 5),
+(84, 'Lê Hồng Phong, Thị trấn Lương Sơn, Huyện Bắc Bình, Bình Thuận', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Nhân Tạo T&T', 0, 'ENABLE', '2024-10-17 16:43:31.000000', 5),
+(85, 'QL55, Xã Đức Thuận, Huyện Tánh Linh, Bình Thuận', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Mini Lâm Nam', 0, 'ENABLE', '2024-10-17 16:43:31.000000', 4),
+(86, 'khu Phố Rẫy, Xã Tân Lý Đông, Huyện Châu Thành, Tiền Giang', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá huyện Châu Thành', 0, 'ENABLE', '2024-10-17 16:43:31.000000', 4),
+(87, 'Hàn Thuyên, Thị trấn Liên Nghĩa, Huyện Đức Trọng, Lâm Đồng', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân banh Nam Sơn', 0, 'ENABLE', '2024-10-17 16:43:31.000000', 3),
+(88, ' Thôn 1, Xã Tân Phúc, Huyện Hàm Tân, Bình Thuận', '2024-10-17 16:43:31.000000', 'Sân bóng đá Than Lửa Đỏ   Số Lượng sân : 03 sân 5  Kích Thước sân : Dài (40m) Ngang (20m) Tổng diện tích : 800m2 Tình trạng kinh doanh : Tốt', 21.022345, 105.792520, 'Sân bóng đá Than Lửa Đỏ ', 0, 'ENABLE', '2024-10-17 16:43:31.000000', 3),
+(89, 'Đ Trần Đức Thảo, Phường Phước Long A, Thành phố Thủ Đức, Hồ Chí Minh', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Đại Học Văn Hóa TP.HCM Cơ Sở 2', 0, 'ENABLE', '2024-10-17 16:43:31.000000', 5),
+(90, '34 P. Tạ Quang Bửu, Phường Bách Khoa, Hai Bà Trưng, Hà Nội', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Kí túc xá Đại học Bách Khoa Hà Nội', 0, 'ENABLE', '2024-10-17 16:43:31.000000', 4),
+(91, 'Thương Châu, Xã Ngũ Phụng, Huyện Phú Quí, Bình Thuận', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini Thường Châu', 0, 'ENABLE', '2024-10-17 16:43:31.000000', 5),
+(92, '63 Phùng Hưng, Phường Lộc Tiến, Thành phố Bảo Lộc, Lâm Đồng', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Minh Quân', 0, 'ENABLE', '2024-10-17 16:43:31.000000', 3),
+(93, 'Khu phố 1tan Phước, Xã Phước Lập, Huyện Tân Phước, Tiền Giang', '2024-10-17 16:43:31.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng minin Phúc Thịnh', 0, 'ENABLE', '2024-10-17 16:43:31.000000', 5),
+(94, '38 Trần Nguyên Hãn, Phường 2, Thành phố Bảo Lộc, Lâm Đồng', '2024-10-17 16:43:32.000000', 'Turf Description', 21.028511, 105.804820, 'HD SPORT - Sân bóng cỏ nhân tạo', 0, 'ENABLE', '2024-10-17 16:43:32.000000', 3),
+(95, 'Đường Huyện 87, Khu Phố 2, Phường 9, Xã Tân Mỹ Chánh, Thành phố Mỹ Tho, Tiền Giang', '2024-10-17 16:43:32.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Cỏ Nhân Tạo Tân Mỹ Chánh', 0, 'ENABLE', '2024-10-17 16:43:32.000000', 5),
+(96, 'QL1A, Tân Hương, Xã Tân Hương, Huyện Châu Thành, Tiền Giang', '2024-10-17 16:43:32.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Trọng Nghĩa Sports - Tân Hương - Tiền Giang', 0, 'ENABLE', '2024-10-17 16:43:32.000000', 3),
+(97, 'Bình Phong, Xã Tân Mỹ Chánh, Thành phố Mỹ Tho, Tiền Giang', '2024-10-17 16:43:32.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Cửu Long FC', 0, 'ENABLE', '2024-10-17 16:43:32.000000', 5),
+(98, 'Cột 5, Phường Hồng Hà, Thành phố Hạ Long, Quảng Ninh', '2024-10-17 16:43:42.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Vũ Đại Dương Hạ Long', 0, 'ENABLE', '2024-10-17 16:43:42.000000', 3),
+(99, 'Đ.P.Đức Chính, Xã Long Hưng, Huyện Văn Giang, Hưng Yên', '2024-10-17 16:43:42.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Long Hưng', 0, 'ENABLE', '2024-10-17 16:43:42.000000', 4),
+(100, 'Nguyễn Thị Định, Xã Thạnh Đông, Huyện Tân Châu, Tây Ninh', '2024-10-17 16:43:42.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng mini cỏ nhân tạo Hữu Hạnh', 0, 'ENABLE', '2024-10-17 16:43:42.000000', 3),
+(101, 'P. Nguyễn Lân, Phường Khương Mai, Thanh Xuân, Hà Nội', '2024-10-17 16:43:42.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Đoan Môn', 0, 'ENABLE', '2024-10-17 16:43:42.000000', 4),
+(102, 'Khu phố 3, Thị trấn Châu Thành, Huyện Châu Thành, Tây Ninh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Vũ Hoàng FS', 0, 'ENABLE', '2024-10-17 16:43:43.000000', 3),
+(103, '52 D. Thị Mười, Phường Tân Hưng Thuận, Quận 12, Hồ Chí Minh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Sài Gòn FC Quận 12', 0, 'ENABLE', '2024-10-17 16:43:43.000000', 3),
+(104, '39PV+XGH, Lộc Phước, Xã Lộc Hưng, Huyện Trảng Bàng, Tây Ninh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Lộc Phước', 0, 'ENABLE', '2024-10-17 16:43:43.000000', 5),
+(105, '56 Đường số 22, Xã Thạnh Đức, Huyện Gò Dầu, Tây Ninh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Mini Phát Đạt', 0, 'ENABLE', '2024-10-17 16:43:43.000000', 5),
+(106, '56/4 Khu phố 2, Phường An Bình, Biên Hòa, Đồng Nai', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá An Bình', 0, 'ENABLE', '2024-10-17 16:43:43.000000', 5),
+(107, 'Đường 3, Xã Thạch Lưu, Huyện Thạch Hà, Hà Tĩnh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Lưu Vĩnh Sơn (LVS Sports)', 0, 'ENABLE', '2024-10-17 16:43:43.000000', 4),
+(108, '210 Huỳnh Tấn Phát, Phường Hiệp Ninh, Thành phố Tây Ninh, Tây Ninh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng mini Thư Giãn', 0, 'ENABLE', '2024-10-17 16:43:43.000000', 3),
+(109, 'Phường Khương Đình, Thanh Xuân, Hà Nội', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Đầm Hồng 1', 0, 'ENABLE', '2024-10-17 16:43:43.000000', 4),
+(110, 'Trường Cao Đẳng Duyên Hải, 109 đường Trường Chinh, Phường Quán Trữ, Quận Kiến An, Hải Phòng', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Cao Đẳng Duyên Hải', 0, 'ENABLE', '2024-10-17 16:43:43.000000', 4),
+(111, 'Thạch Linh 1, Phường Thạch Linh, Thành phố Hà Tĩnh, Hà Tĩnh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng trường Y tế', 0, 'ENABLE', '2024-10-17 16:43:43.000000', 4),
+(112, '221 Lý Thường Kiệt, Phường 09, Quận 11, Hồ Chí Minh', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân vận động Phú Thọ', 0, 'ENABLE', '2024-10-17 16:43:43.000000', 3),
+(113, 'Đối Diện Bãi Giữ Xe Vi Phạm Giao Thông BD, Đường ĐX-040, Phường Phú Mỹ, Thành phố Thủ Dầu Một, Bình Dương', '2024-10-17 16:43:43.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Minh Tâm TP Thủ Dầu Một', 0, 'ENABLE', '2024-10-17 16:43:43.000000', 4),
+(114, 'ĐT725, Xã Hoài Đức, Huyện Lâm Hà, Lâm Đồng', '2024-10-17 16:43:50.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini Trường Híp', 0, 'ENABLE', '2024-10-17 16:43:50.000000', 4),
+(115, '90-92 Nguyễn Trãi, Phường 4, Thành phố Tây Ninh, Tây Ninh', '2024-10-17 16:43:51.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini Thái Bình Dương', 0, 'ENABLE', '2024-10-17 16:43:51.000000', 5),
+(116, 'QL27, Xã Đạ K\' Nàng, Huyện Đam Rông, Lâm Đồng', '2024-10-17 16:43:51.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Phi Liêng', 0, 'ENABLE', '2024-10-17 16:43:51.000000', 4),
+(117, 'Trung tâm văn hoá huyện, Xã Liêng Srônh, Huyện Đam Rông, Lâm Đồng', '2024-10-17 16:43:51.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini - Cung Thiếu Nhi', 0, 'ENABLE', '2024-10-17 16:43:51.000000', 5),
+(118, 'Hẻm Xô Viết Nghệ Tĩnh, Phường 7, Thành phố Đà Lạt, Lâm Đồng', '2024-10-17 16:43:51.000000', 'Turf Description', 21.028511, 105.804820, 'Sân vận động Lâm Đồng', 0, 'ENABLE', '2024-10-17 16:43:51.000000', 4),
+(119, 'Liên Đầm, Thị trấn Di Linh, Huyện Di Linh, Lâm Đồng', '2024-10-17 16:43:51.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini Phát', 0, 'ENABLE', '2024-10-17 16:43:51.000000', 5),
+(120, 'Xã Phùng Xá, Thạch Thất, Hà Nội', '2024-10-17 16:43:51.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá công ty điện tử Meiko', 0, 'ENABLE', '2024-10-17 16:43:51.000000', 5),
+(121, '241 Lý Thái Tổ, Xã Đạm Bri, Thành phố Bảo Lộc, Lâm Đồng', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mIni Quang Vinh', 0, 'ENABLE', '2024-10-17 16:43:52.000000', 4),
+(122, 'Quốc lộ 39B, Xã Ngô Quyền, Huyện Tiên Lữ, Hưng Yên', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng nhân tạo Tiên Lữ (Totti Stadium)', 0, 'ENABLE', '2024-10-17 16:43:52.000000', 5),
+(123, '148 Lê Lợi, Thị trấn Hòa Thành, Huyện Hòa Thành, Tây Ninh', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini Hoà Thành', 0, 'ENABLE', '2024-10-17 16:43:52.000000', 5),
+(124, '5 Đặng Xuân Thiều, Phường Vị Hoàng, Thành phố Nam Định, Nam Định', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Thiên Trường', 0, 'ENABLE', '2024-10-17 16:43:52.000000', 4),
+(125, 'Thôn 1, Thị trấn Di Linh, Huyện Di Linh, Lâm Đồng', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Cây Điệp', 0, 'ENABLE', '2024-10-17 16:43:52.000000', 3),
+(126, '99 Hùng Vương, Thị trấn Krông Năng, Huyện Krông Năng, Đắk Lắk', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Phước Hùng', 0, 'ENABLE', '2024-10-17 16:43:52.000000', 3),
+(127, 'Ấp Trâm vàng 2, Xã Thanh Phước, Huyện Gò Dầu, Tây Ninh', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Ngọc Mai', 0, 'ENABLE', '2024-10-17 16:43:52.000000', 3),
+(128, '32 Nguyễn Du, Thị trấn Ma Đa Guôi, Huyện Đạ Huoai, Lâm Đồng', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng Vườn Tràm', 0, 'ENABLE', '2024-10-17 16:43:52.000000', 5),
+(129, 'thôn 9, Thị trấn Di Linh, Huyện Di Linh, Lâm Đồng', '2024-10-17 16:43:52.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng mini Tân Châu', 0, 'ENABLE', '2024-10-17 16:43:52.000000', 4),
+(130, '13 Hồ Quý Ly, Phường Thắng Tam, Thành phố Vũng Tàu, Bà Rịa - Vũng Tàu', '2024-10-17 16:43:58.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá mini khách sạn Cao Su', 0, 'ENABLE', '2024-10-17 16:43:58.000000', 5),
+(131, 'Nhà văn hóa phường Thạch Bàn, Phường Thạch Bàn, Long Biên, Hà Nội', '2024-10-17 16:43:59.000000', 'Turf Description', 21.022379, 105.910720, 'Sân bóng Hồ Thạch Bàn', 0, 'ENABLE', '2024-10-17 16:43:59.000000', 5),
+(132, 'Sân bóng đá Hoàng Anh, Phường Khánh Xuân, Thành phố Buôn Ma Thuột, Đắk Lắk', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng đá Hoàng Anh', 0, 'ENABLE', '2024-10-17 16:43:59.000000', 5),
+(133, 'Đường 302C, Xã Thiện Kế, Bình Xuyên, Vĩnh Phúc', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Cỏ Nhân Tạo Trong Nhà Bá Thiện', 0, 'ENABLE', '2024-10-17 16:43:59.000000', 5),
+(134, 'Thôn Cốc Lâm, Xã Bình Định, Huyện Yên Lạc, Vĩnh Phúc', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Nam Hải', 0, 'ENABLE', '2024-10-17 16:43:59.000000', 3),
+(135, 'LK28-28 Đ. Số 6, KĐT Mỹ Gia, Nha Trang, Khánh Hòa, Xã Vĩnh Thái, Thành phố Nha Trang, Khánh Hòa', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đá Mini Mỹ Gia 3', 0, 'ENABLE', '2024-10-17 16:43:59.000000', 3),
+(136, '15a Đ. Hồng Hà, Phường Phúc Xá, Ba Đình, Hà Nội', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân bóng 10-10', 0, 'ENABLE', '2024-10-17 16:43:59.000000', 4),
+(137, 'Starlake, Sân Bóng Dewey, Phường Xuân Tảo, Bắc Từ Liêm, Hà Nội', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Dewey', 0, 'ENABLE', '2024-10-17 16:43:59.000000', 5),
+(138, 'Thôn Đông Lao, Xã Đông La, Hoài Đức, Hà Nội', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân Bóng Đông Lao', 0, 'ENABLE', '2024-10-17 16:43:59.000000', 3),
+(139, 'Đ.Lê Quang Đạo, Phường Mễ Trì, Nam Từ Liêm, Hà Nội', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân cỏ nhân tạo Trung tâm đào tạo bóng đá trẻ VYF', 0, 'ENABLE', '2024-10-17 16:43:59.000000', 5),
+(140, 'Đ. Hùng Vương, Phường Thọ Sơn, Thành phố Việt Trì, Phú Thọ', '2024-10-17 16:43:59.000000', 'Turf Description', 21.028511, 105.804820, 'Sân vận động tỉnh Phú Thọ', 0, 'ENABLE', '2024-10-17 16:43:59.000000', 3),
+(141, '401 DX 047 Ấp Lồ Ồ, Xã An Tây, Thị xã Bến Cát, Bình Dương', '2024-10-17 16:44:00.000000', 'Turf Description', 11.091200, 106.538071, 'Sân bóng Hà Thành', 0, 'ENABLE', '2024-10-17 16:44:00.000000', 3),
+(142, '17 Hoàng Thế Thiện, Phường An Lợi Đông, Phường Thủ Thiêm , Thành phố Thủ Đức, Hồ Chí Minh', '2024-10-17 16:44:00.000000', 'Turf Description', 10.768090, 106.722620, 'Sân Vận Động Sala Đại Quang Minh', 0, 'ENABLE', '2024-10-17 16:44:00.000000', 3),
+(143, 'Đ. Lê Lợi, Phường Cái Khế, Quận Ninh Kiều, Cần Thơ', '2024-10-17 16:44:00.000000', 'Turf Description', 10.046410, 105.788990, 'Sân vận động Cần Thơ', 0, 'ENABLE', '2024-10-17 16:44:00.000000', 3),
+(144, '206 Vườn Lài, Phường An Phú Đông, Quận 12, Hồ Chí Minh', '2024-10-17 16:44:00.000000', 'Turf Description', 10.842940, 106.693520, 'Sân bóng Tiến Trường Vườn Lài An Phú Đông', 0, 'ENABLE', '2024-10-17 16:44:00.000000', 3),
+(145, 'Ngõ 22 Nhuệ Giang, Phường Tây Mỗ, Nam Từ Liêm, Hà Nội', '2024-10-17 16:44:00.000000', 'Turf Description', 21.016353, 105.746017, 'Sân bóng đá Coma 6', 0, 'ENABLE', '2024-10-17 16:44:00.000000', 2),
+(146, ' 1 P. Tôn Thất Tùng, Phường Kim Liên, Quận Đống Đa, Hà Nội', '2024-11-26 16:23:05.000000', 'Nằm trong khuôn viên trường Đại học Y Hà Nội,', 21.022345, 105.792520, 'Sân cỏ nhân tạo Đại Học Y Hà Nội', 0, 'ENABLE', '2024-11-26 16:23:05.000000', 5),
+(147, ' Số 8 phố Hồng Quang, Phường Đại Kim, Hoàng Mai, Hà Nội', '2024-11-26 16:33:57.000000', 'Sân bóng Hồng Quang  Số Lượng sân : 3 sân 7 người Kích Thước sân : Dài (50m) Ngang (30m) Tổng diện tích : 3 x 1500m2 Tình trạng kinh doanh : Tốt', 21.022345, 105.792520, 'Sân bóng Hồng Quang', 0, 'ENABLE', '2024-11-26 16:33:57.000000', 4),
+(150, ' Ng. 353 An Dương Vương, Phố Thượng Thụy, Phường Phú Thượng, Tây Hồ, Hà Nội', '2024-11-26 16:53:30.000000', 'Mô tả về sân 4 sân bóng, sử dụng cỏ nhân tạo hãng AVG  Sân bóng Đại Phát Tây Hồ  Số lượng sân: 04 sân 5 người, 1 sân 11 người Kích thước sân: 4 sân Dài (48m) Ngang (25m), 1 sân Dài (90m) Ngang (50m)', 21.022345, 105.792520, 'Sân bóng Đại Phát Tây Hồ', 0, 'ENABLE', '2024-11-26 16:53:30.000000', 4),
+(151, 'Quảng Nam, Phường Hoà Quý, Quận Ngũ Hành Sơn, Đà Nẵng', '2024-11-26 16:59:40.000000', 'Sân bóng KAKA Sport khu đô thị Hòa Quý  Quảng Nam, Phường Hoà Quý, Quận Ngũ Hành Sơn, Đà Nẵng Sân bóng KAKA Sport khu đô thị Hòa Quý  Số Lượng sân : 04 sân 5 người Kích Thước sân : Dài (40m) Ngang (25m) Tổng diện tích : 1000m2 Tình trạng kinh doanh : Tốt', 21.022345, 105.792520, 'Sân bóng KAKA Sport khu đô thị Hòa Quý', 0, 'ENABLE', '2024-11-26 16:59:40.000000', 5);
 
 -- --------------------------------------------------------
 
@@ -265,13 +265,11 @@ INSERT INTO `turf` (`id`, `address`, `created_at`, `description`, `location_lat`
 -- Table structure for table `turf_image`
 --
 
-CREATE TABLE IF NOT EXISTS `turf_image` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `turf_image` (
+  `id` int(11) NOT NULL,
   `url` varchar(255) NOT NULL,
-  `turf_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_TURF_IMAGES` (`turf_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=479 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `turf_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `turf_image`
@@ -754,7 +752,19 @@ INSERT INTO `turf_image` (`id`, `url`, `turf_id`) VALUES
 (475, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/nam-tu-liem/san-bong-da-coma-6/san-bong-coma-6-2_thumb_720.webp', 145),
 (476, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/nam-tu-liem/san-bong-da-coma-6/san-bong-coma-6-4_thumb_720.webp', 145),
 (477, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/nam-tu-liem/san-bong-da-coma-6/san-bong-coma-6-3_thumb_720.webp', 145),
-(478, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/nam-tu-liem/san-bong-da-coma-6/san-bong-coma-6-5_thumb_720.webp', 145);
+(478, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/nam-tu-liem/san-bong-da-coma-6/san-bong-coma-6-5_thumb_720.webp', 145),
+(479, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/dong-da/san-y-ha-noi/san-dai-hoc-y-hn-1_thumb_720.jpg', 146),
+(480, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/dong-da/san-y-ha-noi/san-dai-hoc-y-hn-1_thumb_720.jpg', 146),
+(481, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/hoang-mai/hong-quang/san-bong-hong-quang-3_thumb_720.webp', 147),
+(482, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/hoang-mai/hong-quang/san-bong-hong-quang_thumb_720.webp', 147),
+(483, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/dong-da/san-y-ha-noi/san-dai-hoc-y-hn-1_thumb_720.jpg', 148),
+(484, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/dong-da/san-y-ha-noi/san-dai-hoc-y-hn-1_thumb_720.jpg', 148),
+(485, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/dong-da/san-y-ha-noi/san-dai-hoc-y-hn-1_thumb_720.jpg', 149),
+(486, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/dong-da/san-y-ha-noi/san-dai-hoc-y-hn-1_thumb_720.jpg', 149),
+(487, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/tay-ho/san-dai-phat/san-bong-dai-phat-7_thumb_720.webp', 150),
+(488, 'https://img.thegioithethao.vn/thumbs/san-bong-da/ha-noi/tay-ho/san-dai-phat/san-bong-dai-phat-3_thumb_720.webp', 150),
+(489, 'https://img.thegioithethao.vn/thumbs/san-bong-da/da-nang/ngu-hanh-son/san-bong-da-kaka-sport-khu-do-thi-hoa-quy/san-bong-sport-khu-do-thi-hoa-quy-1_thumb_720.webp', 151),
+(490, 'https://img.thegioithethao.vn/thumbs/san-bong-da/da-nang/ngu-hanh-son/san-bong-da-kaka-sport-khu-do-thi-hoa-quy/san-bong-sport-khu-do-thi-hoa-quy-3_thumb_720.webp', 151);
 
 -- --------------------------------------------------------
 
@@ -762,17 +772,15 @@ INSERT INTO `turf_image` (`id`, `url`, `turf_id`) VALUES
 -- Table structure for table `turf_price`
 --
 
-CREATE TABLE IF NOT EXISTS `turf_price` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `turf_price` (
+  `id` int(11) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `end_time` time(6) DEFAULT NULL,
   `price` double DEFAULT NULL,
   `start_time` time(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
-  `turf_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK_TURF_PRICES` (`turf_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1443 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `turf_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `turf_price`
@@ -2221,7 +2229,11 @@ INSERT INTO `turf_price` (`id`, `created_at`, `end_time`, `price`, `start_time`,
 (1439, '2024-10-17 16:44:00.000000', '17:30:00.000000', 800000, '16:00:00.000000', '2024-10-17 16:44:00.000000', 145),
 (1440, '2024-10-17 16:44:00.000000', '19:00:00.000000', 1000000, '17:30:00.000000', '2024-10-17 16:44:00.000000', 145),
 (1441, '2024-10-17 16:44:00.000000', '20:30:00.000000', 1000000, '19:00:00.000000', '2024-10-17 16:44:00.000000', 145),
-(1442, '2024-10-17 16:44:00.000000', '22:00:00.000000', 8000000, '20:30:00.000000', '2024-10-17 16:44:00.000000', 145);
+(1442, '2024-10-17 16:44:00.000000', '22:00:00.000000', 8000000, '20:30:00.000000', '2024-10-17 16:44:00.000000', 145),
+(1443, '2024-11-26 16:23:05.000000', '19:40:00.000000', 6789456, '18:44:00.000000', '2024-11-26 16:23:05.000000', 146),
+(1444, '2024-11-26 16:33:57.000000', '21:30:00.000000', 1200000, '20:30:00.000000', '2024-11-26 16:33:57.000000', 147),
+(1447, '2024-11-26 16:53:30.000000', '17:30:00.000000', 2222222, '16:30:00.000000', '2024-11-26 16:53:30.000000', 150),
+(1448, '2024-11-26 16:59:40.000000', '09:30:00.000000', 800000, '08:00:00.000000', '2024-11-26 16:59:40.000000', 151);
 
 -- --------------------------------------------------------
 
@@ -2229,8 +2241,8 @@ INSERT INTO `turf_price` (`id`, `created_at`, `end_time`, `price`, `start_time`,
 -- Table structure for table `user`
 --
 
-CREATE TABLE IF NOT EXISTS `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
   `avatar` varchar(255) DEFAULT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
@@ -2240,19 +2252,105 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` varchar(255) DEFAULT NULL,
   `phone` varchar(255) DEFAULT NULL,
   `role` enum('ADMIN','CUSTOMER','TURF_OWNER') DEFAULT NULL,
-  `updated_at` datetime(6) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UK_ob8kqyqqgmefl0aco34akdtpe` (`email`),
-  UNIQUE KEY `UK_589idila9li6a4arw1t8ht1gx` (`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `updated_at` datetime(6) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `avatar`, `created_at`, `email`, `enabled`, `first_name`, `last_name`, `password`, `phone`, `role`, `updated_at`) VALUES
-(2, NULL, '2024-10-12 22:26:38.000000', 'tung@example.com', b'1', 'John', 'Doe', '$2a$10$zciuyuaghUTSK55GSxhW4.20H5KT7bKWW8zE9bLG62CGvADOZAD/.', NULL, 'CUSTOMER', '2024-10-12 22:26:38.000000'),
-(3, NULL, '2024-10-16 01:01:32.000000', 'owner@turf.com', b'1', 'Mr', 'Owner', '$2a$10$/.8CZfvTqsGe/Gci/Ajthe/HkFubV57ItEqCfPjFeaTICQnInwzFq', NULL, 'TURF_OWNER', '2024-10-16 01:01:32.000000');
+(2, NULL, '2024-10-12 22:26:38.000000', 'tung@example.com', b'1', 'Tung', 'Trieu', '$2a$10$zciuyuaghUTSK55GSxhW4.20H5KT7bKWW8zE9bLG62CGvADOZAD/.', NULL, 'CUSTOMER', '2024-10-12 22:26:38.000000'),
+(3, NULL, '2024-10-16 01:01:32.000000', 'owner@turf.com', b'1', 'Mr', 'Owner', '$2a$10$/.8CZfvTqsGe/Gci/Ajthe/HkFubV57ItEqCfPjFeaTICQnInwzFq', NULL, 'TURF_OWNER', '2024-10-16 01:01:32.000000'),
+(4, NULL, '2024-11-19 15:33:44.000000', 'owner1@turf.com', b'1', 'Mr', 'Owner1', '$2a$10$Y81mT5Yex.ZsdNM7S9a22.19YS4P/wgGbofCFrmPc/yZa76z//VCK', NULL, 'TURF_OWNER', '2024-11-19 15:33:44.000000'),
+(5, NULL, '2024-11-19 15:33:53.000000', 'owner2@turf.com', b'1', 'Mr', 'Owner2', '$2a$10$KsdWM6g8E8XgyWMXopCj5.uiGHt0EggfHY0lLQefXAewSpNs7sY66', NULL, 'TURF_OWNER', '2024-11-19 15:33:53.000000');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `booking`
+--
+ALTER TABLE `booking`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_BOOKING_USERS` (`user_id`),
+  ADD KEY `FK_BOOKING_TURFS` (`turf_id`);
+
+--
+-- Indexes for table `time_slot`
+--
+ALTER TABLE `time_slot`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `turf`
+--
+ALTER TABLE `turf`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_TURF_USERS` (`owner_id`);
+
+--
+-- Indexes for table `turf_image`
+--
+ALTER TABLE `turf_image`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_TURF_IMAGES` (`turf_id`);
+
+--
+-- Indexes for table `turf_price`
+--
+ALTER TABLE `turf_price`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_TURF_PRICES` (`turf_id`);
+
+--
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UK_ob8kqyqqgmefl0aco34akdtpe` (`email`),
+  ADD UNIQUE KEY `UK_589idila9li6a4arw1t8ht1gx` (`phone`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `booking`
+--
+ALTER TABLE `booking`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `time_slot`
+--
+ALTER TABLE `time_slot`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `turf`
+--
+ALTER TABLE `turf`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
+
+--
+-- AUTO_INCREMENT for table `turf_image`
+--
+ALTER TABLE `turf_image`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=491;
+
+--
+-- AUTO_INCREMENT for table `turf_price`
+--
+ALTER TABLE `turf_price`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1449;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables
