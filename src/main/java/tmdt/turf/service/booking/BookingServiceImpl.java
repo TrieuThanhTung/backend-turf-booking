@@ -22,6 +22,7 @@ import tmdt.turf.repository.TurfRepository;
 import tmdt.turf.repository.UserRepository;
 import tmdt.turf.service.user.UserService;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,8 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public void create(BookingDto bookingDto) {
+        if (bookingDto.getDateBooking().isBefore(LocalDate.now()))
+            throw new CustomException("Date is invalid", HttpStatus.UNPROCESSABLE_ENTITY);
         User secureUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userRepository.findById(secureUser.getId())
                 .orElseThrow(() -> new CustomException("User not found", HttpStatus.NOT_FOUND));
@@ -68,6 +71,38 @@ public class BookingServiceImpl implements BookingService {
         Pageable pageable = PageRequest.of(page - 1, 5, sortWishItem);
         Page<Booking> bookingPage = bookingRepository.findByStatusAndUser(status, user, pageable);
         List<BookingResponseDto> bookingResponseDtos = bookingPage.getContent().stream()
+                .map((booking) -> {
+                            BookingResponseDto bookingResponseDto = BookingResponseDto.builder()
+                                    .id(booking.getId())
+                                    .turfName(booking.getTurf().getName())
+                                    .turfAddress(booking.getTurf().getAddress())
+                                    .startTime(booking.getStartTime())
+                                    .endTime(booking.getEndTime())
+                                    .date(booking.getDate())
+                                    .price(booking.getPrice())
+                                    .createdAt(booking.getCreatedAt())
+                                    .build();
+                            if (!booking.getTurf().getImages().isEmpty()) {
+                                bookingResponseDto.setTurfImages(booking.getTurf().getImages().get(0).getUrl());
+                            }
+                            return bookingResponseDto;
+                        }
+                ).toList();
+        return PageBookings.builder()
+                .bookings(bookingResponseDtos)
+                .currentPage(bookingPage.getNumber() + 1)
+                .totalPages(bookingPage.getTotalPages())
+                .build();
+    }
+
+    @Override
+    public PageBookings getWithOwnerRole(Integer page, BookingStatus status) {
+        User user = userService.getProfile();
+        Sort sortWishItem = Sort.by("createdAt").descending();
+        Pageable pageable = PageRequest.of(page - 1, 5, sortWishItem);
+        Page<Booking> bookingPage = bookingRepository.findByStatusAndUser(status, user, pageable);
+        List<BookingResponseDto> bookingResponseDtos = bookingPage.getContent().stream()
+                .filter((booking -> booking.getTurf().getOwner().getId().equals(user.getId())))
                 .map((booking) -> {
                             BookingResponseDto bookingResponseDto = BookingResponseDto.builder()
                                     .id(booking.getId())

@@ -8,4 +8,6 @@ public interface BookingService {
     void create(BookingDto bookingDto);
 
     PageBookings get(Integer page, BookingStatus status);
+
+    PageBookings getWithOwnerRole(Integer page, BookingStatus status);
 }

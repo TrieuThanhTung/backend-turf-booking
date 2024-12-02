@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public TokenDto login(LoginDto loginDto) {
         User user = userRepository.findByEmail(loginDto.getEmail())
-                .orElseThrow(() -> new CustomException("User is existed", HttpStatus.EXPECTATION_FAILED));
+                .orElseThrow(() -> new CustomException("Account not FOUND, wrong password or wrong email", HttpStatus.EXPECTATION_FAILED));
         if (!user.getEnabled()) {
             throw new CustomException("Login FAIL!. Account not FOUND.", HttpStatus.UNAUTHORIZED);
         }
