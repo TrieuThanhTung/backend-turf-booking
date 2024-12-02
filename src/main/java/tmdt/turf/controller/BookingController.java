@@ -28,4 +28,12 @@ public class BookingController {
         PageBookings pageBookings = bookingService.get(page, status);
         return ResponseEntity.status(200).body(new APIResponse("Get booking successfully!", pageBookings));
     }
+
+    @GetMapping("/owner")
+    @PreAuthorize("hasAuthority('TURF_OWNER')")
+    public ResponseEntity<?> getWithOwnerRole (@RequestParam(name = "page", defaultValue = "1", required = false) Integer page,
+                                  @RequestParam(name = "status", defaultValue = "PENDING", required = false) BookingStatus status) {
+        PageBookings pageBookings = bookingService.getWithOwnerRole(page, status);
+        return ResponseEntity.status(200).body(new APIResponse("Get booking successfully!", pageBookings));
+    }
 }
