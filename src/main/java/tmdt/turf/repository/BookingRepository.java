@@ -12,6 +12,7 @@ import tmdt.turf.model.user.User;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,4 +22,6 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     Optional<Booking> findByTurfAndDateTime(Turf turf, LocalTime startTime, LocalDate date);
 
     Page<Booking> findByStatusAndUser(BookingStatus status, User user, Pageable pageable);
+
+    List<Booking> findByStatus(BookingStatus bookingStatus);
 }
