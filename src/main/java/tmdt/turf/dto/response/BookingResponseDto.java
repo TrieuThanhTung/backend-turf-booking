@@ -14,9 +14,12 @@ import java.time.LocalTime;
 @Setter
 public class BookingResponseDto {
     private Integer id;
+    private Integer turfId;
     private String turfName;
     private String turfAddress;
     private String turfImages;
+    private Float location_lat;
+    private Float location_lon;
     @JsonFormat(pattern = "HH:mm")
     private LocalTime startTime;
     @JsonFormat(pattern = "HH:mm")

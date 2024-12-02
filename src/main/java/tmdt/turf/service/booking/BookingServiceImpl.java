@@ -74,8 +74,11 @@ public class BookingServiceImpl implements BookingService {
                 .map((booking) -> {
                             BookingResponseDto bookingResponseDto = BookingResponseDto.builder()
                                     .id(booking.getId())
+                                    .turfId(booking.getTurf().getId())
                                     .turfName(booking.getTurf().getName())
                                     .turfAddress(booking.getTurf().getAddress())
+                                    .location_lat(booking.getTurf().getLocation_lat())
+                                    .location_lon(booking.getTurf().getLocation_lon())
                                     .startTime(booking.getStartTime())
                                     .endTime(booking.getEndTime())
                                     .date(booking.getDate())
@@ -106,8 +109,11 @@ public class BookingServiceImpl implements BookingService {
                 .map((booking) -> {
                             BookingResponseDto bookingResponseDto = BookingResponseDto.builder()
                                     .id(booking.getId())
+                                    .turfId(booking.getTurf().getId())
                                     .turfName(booking.getTurf().getName())
                                     .turfAddress(booking.getTurf().getAddress())
+                                    .location_lat(booking.getTurf().getLocation_lat())
+                                    .location_lon(booking.getTurf().getLocation_lon())
                                     .startTime(booking.getStartTime())
                                     .endTime(booking.getEndTime())
                                     .date(booking.getDate())
