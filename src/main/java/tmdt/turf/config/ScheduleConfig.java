@@ -20,8 +20,8 @@ import java.util.List;
 public class ScheduleConfig {
     private final BookingRepository bookingRepository;
 
-    @Scheduled(cron = "*/5 * * * *")
-    public void test() {
+    @Scheduled(cron = "0 5 * * * *")
+    public void update() {
         List<Booking> bookings = bookingRepository.findByStatus(BookingStatus.PENDING);
         bookings.forEach((booking -> {
             if (booking.getDate().isBefore(LocalDate.now())) {
